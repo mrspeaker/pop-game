@@ -1,36 +1,31 @@
 class State {
-  last = "";
-  stateTime = Date.now();
-  isNewState = false;
-
-  constructor (state) {
-    this.state = state;
+  constructor(state) {
+    this.set(state);
   }
 
-  set (state) {
+  set(state) {
     this.last = this.state;
     this.state = state;
-    this.stateTime = Date.now();
-    this.isNewState = true;
+    this.time = 0;
+    this.first = true;
   }
 
-  get () {
+  get() {
     return this.state;
   }
 
-  is (state) {
-    return state === this.state;
+  update(dt) {
+    this.first = false;
+    this.time += dt;
   }
 
-  isIn (...args) {
-    const {state} = this;
-    return args.some(s => s === state);
+  is(state) {
+    return this.state === state;
   }
 
-  time () {
-    return Date.now() - this.stateTime;
+  isIn(...states) {
+    return states.some(s => this.is(s));
   }
-
 }
 
 export default State;

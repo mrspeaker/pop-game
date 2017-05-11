@@ -15,6 +15,10 @@ function addDebug(entity) {
   return entity;
 }
 
+function angle(a, b) {
+  return math.angle(center(a), center(b));
+}
+
 function center(entity) {
   const {
     pos, w, h
@@ -133,6 +137,7 @@ function checkChildrenCollisions(container, hitCallback) {
 
 export default {
   addDebug,
+  angle,
   bounds,
   center,
   distance,

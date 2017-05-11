@@ -13,7 +13,7 @@ function angle (a, b) {
   return angle;
 }
 
-// FIXME: nope: center here should not know wabout entity.
+// FIXME: nope: center here should not know about entity.
 // how did this get here? Check repo
 function center (entity, w, h) {
   w = entity.w || w || 0;
@@ -73,6 +73,10 @@ function randOneIn(max) {
   return rand(0, max) === 0;
 }
 
+function randOneFrom(items) {
+  return items[rand(0, items.length)];
+}
+
 const rnd = {
   seed: 42,
   rand: function(max, min) {
@@ -102,6 +106,7 @@ export default {
   rand,
   randf,
   randOneIn,
+  randOneFrom,
   rnd,
   smoothstep
 };

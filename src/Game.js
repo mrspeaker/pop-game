@@ -4,11 +4,11 @@ import CanvasRenderer from "./renderer/CanvasRenderer";
 import screenCapture from "./utils/screenCapture";
 
 class Game {
-  constructor(w, h) {
+  constructor(w, h, container = "#board") {
     this.w = w;
     this.h = h;
     this.renderer = new CanvasRenderer(w, h);
-    document.querySelector("#board").appendChild(this.renderer.view);
+    document.querySelector(container).appendChild(this.renderer.view);
     screenCapture(this.renderer.view);
 
     this.scene = new Container();
