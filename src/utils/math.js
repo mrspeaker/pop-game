@@ -1,11 +1,11 @@
-function add (v1, v2) {
+function add(v1, v2) {
   return {
     x: v1.x + v2.x,
     y: v1.y + v2.y
   };
 }
 
-function angle (a, b) {
+function angle(a, b) {
   const dx = a.x - b.x;
   const dy = a.y - b.y;
   const angle = Math.atan2(dy, dx);
@@ -13,43 +13,49 @@ function angle (a, b) {
   return angle;
 }
 
-// FIXME: nope: center here should not know about entity.
-// how did this get here? Check repo
-function center (entity, w, h) {
-  w = entity.w || w || 0;
-  h = entity.h || h || 0;
-  entity = entity.pos || entity;
+function center(w, h) {
   return {
-    x: entity.x + w / 2,
-    y: entity.y + h / 2
+    x: w / 2,
+    y: h / 2
   };
 }
 
-function clamp (x, min, max) {
+function clamp(x, min, max) {
   return Math.max(min, Math.min(x, max));
 }
 
-function distance (a, b) {
+function distance(a, b) {
   const dx = a.x - b.x;
   const dy = a.y - b.y;
 
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-function lerp (x, inf, sup) {
-  return (x-inf) / (sup-inf);
+function dot(a, b) {
+  return a.x * b.x + a.y * b.y;
 }
 
-function gauss (x) {
-  return Math.exp(- x * x);
+function lerp(x, inf, sup) {
+  return (x - inf) / (sup - inf);
 }
 
-function gaussDistance (x, center, dist) {
-  return gauss((x-center)/dist);
+function gauss(x) {
+  return Math.exp(-x * x);
 }
 
-function mix (a, b, p) {
+function gaussDistance(x, center, dist) {
+  return gauss((x - center) / dist);
+}
+
+function mix(a, b, p) {
   return a * (1 - p) + b * p;
+}
+
+function normalize({ x, y }) {
+  const length = Math.sqrt(x * x + y * y);
+  x /= length;
+  y /= length;
+  return { x, y };
 }
 
 // re-made this as randOneFrom... which is better?
@@ -83,13 +89,13 @@ const rnd = {
     max = max || 1;
     min = min || 0;
     this.seed = (this.seed * 9301 + 49297) % 233280;
-    return ((this.seed / 233280) * (max - min) + min) | 0;
+    return (this.seed / 233280 * (max - min) + min) | 0;
   }
 };
 
-function smoothstep (value, inf, sup) {
+function smoothstep(value, inf, sup) {
   var x = clamp(lerp(value, inf, sup), 0, 1);
-  return x*x*(3 - 2*x); // smooth formula
+  return x * x * (3 - 2 * x); // smooth formula
 }
 
 export default {
@@ -98,10 +104,12 @@ export default {
   center,
   clamp,
   distance,
+  dot,
   gauss,
   gaussDistance,
   lerp,
   mix,
+  normalize,
   pick,
   rand,
   randf,
