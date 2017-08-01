@@ -1,8 +1,8 @@
 class CanvasRenderer {
   constructor(w, h) {
     const canvas = document.createElement("canvas");
-    this.w = (canvas.width = w);
-    this.h = (canvas.height = h);
+    this.w = canvas.width = w;
+    this.h = canvas.height = h;
     this.view = canvas;
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
@@ -16,16 +16,23 @@ class CanvasRenderer {
       // Render the container children
       container.children.forEach(child => {
         // Don't render self (or children) if not visible
-        if (child.visible == false) {
-          ctx.restore();
+        if (child.visible === false || child.alpha === 0) {
           return;
         }
+
         ctx.save();
+        if (child.alpha) {
+          ctx.globalAlpha = child.alpha;
+        }
 
         let px = child.pivot ? child.pivot.x : 0;
         let py = child.pivot ? child.pivot.y : 0;
-        if (child.pos) ctx.translate(child.pos.x, child.pos.y);
-        if (child.scale) ctx.scale(child.scale.x, child.scale.y);
+        if (child.pos) {
+          ctx.translate(Math.round(child.pos.x), Math.round(child.pos.y));
+        }
+        if (child.scale) {
+          ctx.scale(child.scale.x, child.scale.y);
+        }
         if (child.rotation) {
           ctx.translate(px, py);
           ctx.rotate(child.rotation);
