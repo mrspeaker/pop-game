@@ -18,7 +18,7 @@ import Texture from "./Texture";
 import TileMap from "./TileMap";
 import TileSprite from "./TileSprite";
 import TwinStickControls from "./controls/TwinStickControls";
-import Vec from "./utils/Vec2";
+import Vec from "./utils/Vec";
 import visibleInViewport from "./utils/visibleInViewport";
 import wallSlide from "./movement/wallSlide";
 
