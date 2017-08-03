@@ -1,7 +1,9 @@
 class Vec {
+
+  static from = v => new Vec().copy(v);
+
   constructor(x = 0, y = 0) {
-    this.x = x;
-    this.y = y;
+    this.set(x, y);
   }
 
   set(x, y) {
