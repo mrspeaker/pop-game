@@ -6,6 +6,7 @@ import Game from "./Game";
 import entity from "./utils/entity";
 import KeyControls from "./controls/KeyControls";
 import math from "./utils/math";
+import physics from "./utils/physics";
 import MouseControls from "./controls/MouseControls";
 import Rect from "./Rect";
 import Sound from "./sound/Sound";
@@ -31,6 +32,7 @@ export default {
   entity,
   KeyControls,
   math,
+  physics,
   MouseControls,
   Rect,
   Sound,
