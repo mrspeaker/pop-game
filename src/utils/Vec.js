@@ -1,5 +1,4 @@
 class Vec {
-
   static from = v => new Vec().copy(v);
 
   constructor(x = 0, y = 0) {
@@ -12,14 +11,14 @@ class Vec {
     return this;
   }
 
-  copy({x, y}) {
+  copy({ x, y }) {
     this.x = x;
     this.y = y;
     return this;
   }
 
   clone() {
-    return new Vec(this.x, this.y);
+    return Vec.from(this);
   }
 
   add({ x, y }) {
@@ -53,8 +52,10 @@ class Vec {
 
   normalize() {
     const mag = this.mag();
-    this.x /= mag;
-    this.y /= mag;
+    if (mag > 0) {
+      this.x /= mag;
+      this.y /= mag;
+    }
     return this;
   }
 
