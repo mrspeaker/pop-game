@@ -1,14 +1,14 @@
-function applyForce (e, force) {
+function applyForce(e, force) {
   const { acc, mass = 1 } = e;
   acc.x += force.x / mass;
   acc.y += force.y / mass;
 }
 
-function applyImpulse (e, force, dt) {
+function applyImpulse(e, force, dt) {
   applyForce(e, { x: force.x / dt, y: force.y / dt });
 }
 
-function integrate (e, dt) {
+function integrate(e, dt) {
   const { vel, acc } = e;
   const vx = vel.x + acc.x * dt;
   const vy = vel.y + acc.y * dt;
@@ -19,11 +19,13 @@ function integrate (e, dt) {
   return { x, y };
 }
 
-function integratePos (e, dt) {
-  return e.pos.add(integrate(e, dt));
+function integratePos(e, dt) {
+  const dis = integrate(e, dt);
+  e.pos.add(dis);
+  return dis;
 }
 
-function speed ({vel}) {
+function speed({ vel }) {
   return Math.sqrt(vel.x * vel.x + vel.y * vel.y);
 }
 

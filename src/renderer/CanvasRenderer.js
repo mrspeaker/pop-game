@@ -48,6 +48,16 @@ class CanvasRenderer {
         } else if (child.style && child.w && child.h) {
           ctx.fillStyle = child.style.fill;
           ctx.fillRect(-px, -py, child.w, child.h);
+        } else if (child.path) {
+          const [head, ...tail] = child.path;
+          if (tail.length > 0) {
+            ctx.fillStyle = child.style.fill || "#fff";
+            ctx.beginPath();
+            ctx.moveTo(head.x, head.y);
+            tail.forEach(({ x, y }) => ctx.lineTo(x, y));
+            ctx.closePath();
+            ctx.fill();
+          }
         } else if (child.texture) {
           const img = child.texture.img;
           if (child.tileW) {
