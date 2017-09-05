@@ -17,23 +17,26 @@ Any example using the `Game` helper can take screen shot with `~` key.
 ```
 Assets
 Camera
-CanvasRenderer
+CanvasRenderer - renderer/
 Container
 Game
-entity
-KeyControls
-mathutils
-MouseControls
-Sound
-SoundPool
-SoundGroup
+entity - utils/
+KeyControls - controls/
+math - utils/
+MouseControls - controls/
+physics - utils/
+Rect
+Sound - sound/
+SoundPool - sound/
+SoundGroup - sound/
 Sprite
 State
 Text
 Texture
 TileMap
 TileSprite
-TwinStickControls
+TwinStickControls - controls/
 visibleInViewport
-wallSlide
+wallSlide - movement/
+Vec - utils/
 ```

@@ -6,48 +6,54 @@ import Assets from "../Assets";
     loop (boolean)
 */
 class Sound {
-
-  playing = false;
-
-  constructor (src, options) {
+  constructor(src, options) {
+    this.playing = false;
     this.src = src;
-
-    this.options = Object.assign({}, {volume: 1}, options);
+    this.options = Object.assign({ volume: 1 }, options);
 
     // Configure audio element
-    const audio = this.audio = Assets.sound(src);
+    const audio = Assets.sound(src);
     if (options.loop) {
       audio.loop = true;
     }
-
-    audio.addEventListener("error", () => {
-      throw new Error("Error loading audio resource: " + audio.src);
-    }, false);
-    audio.addEventListener("ended", () => this.playing = false, false);
+    audio.addEventListener(
+      "error",
+      () => {
+        throw new Error("Error loading audio resource: " + audio.src);
+      },
+      false
+    );
+    audio.addEventListener(
+      "ended",
+      () => {
+        this.playing = false;
+      },
+      false
+    );
+    this.audio = audio;
   }
 
-  play (options) {
+  play(options) {
     options = Object.assign({}, this.options, options);
-    const {audio} = this;
+    const { audio } = this;
     audio.volume = options.volume;
     audio.currentTime = 0;
     audio.play();
     this.playing = true;
   }
 
-  stop () {
+  stop() {
     this.audio.pause();
     this.playing = false;
   }
 
-  get volume () {
+  get volume() {
     return this.audio.volume;
   }
 
-  set volume (volume) {
+  set volume(volume) {
     this.options.volume = this.audio.volume = volume;
   }
-
 }
 
 export default Sound;
