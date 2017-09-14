@@ -6,7 +6,7 @@ import Assets from "../Assets";
     loop (boolean)
 */
 class Sound {
-  constructor(src, options) {
+  constructor(src, options = {}) {
     this.playing = false;
     this.src = src;
     this.options = Object.assign({ volume: 1 }, options);
@@ -19,7 +19,7 @@ class Sound {
     audio.addEventListener(
       "error",
       () => {
-        throw new Error("Error loading audio resource: " + audio.src);
+        throw Error(`Error loading audio: ${src}`);
       },
       false
     );
@@ -33,11 +33,11 @@ class Sound {
     this.audio = audio;
   }
 
-  play(options) {
-    options = Object.assign({}, this.options, options);
-    const { audio } = this;
-    audio.volume = options.volume;
-    audio.currentTime = 0;
+  play(overrides) {
+    const { audio, options } = this;
+    const opts = Object.assign({ time: 0 }, options, overrides);
+    audio.volume = opts.volume;
+    audio.currentTime = opts.time;
     audio.play();
     this.playing = true;
   }
