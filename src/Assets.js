@@ -84,9 +84,26 @@ const Assets = {
     });
   },
 
+  soundBuffer(url, ctx) {
+    return load(url, (url, onAssetLoad) =>
+      fetch(url).then(r => r.arrayBuffer()).then(
+        ab =>
+          new Promise(success => {
+            ctx.decodeAudioData(ab, buffer => {
+              onAssetLoad(url);
+              success(buffer);
+            });
+          })
+      )
+    );
+  },
+
   json(url) {
     return load(url, (url, onAssetLoad) =>
-      fetch(url).then(res => res.json()).then(json => onAssetLoad(json))
+      fetch(url).then(res => res.json()).then(json => {
+        onAssetLoad(url);
+        return json;
+      })
     );
   }
 };

@@ -10,6 +10,7 @@ import physics from "./utils/physics";
 import MouseControls from "./controls/MouseControls";
 import Rect from "./Rect";
 import Sound from "./sound/Sound";
+import SoundBuffer from "./sound/SoundBuffer";
 import SoundGroup from "./sound/SoundGroup";
 import SoundPool from "./sound/SoundPool";
 import Sprite from "./Sprite";
@@ -22,6 +23,7 @@ import TwinStickControls from "./controls/TwinStickControls";
 import Vec from "./utils/Vec";
 import visibleInViewport from "./utils/visibleInViewport";
 import wallSlide from "./movement/wallSlide";
+import webAudio from "./sound/webAudio";
 
 export default {
   Assets,
@@ -36,6 +38,7 @@ export default {
   MouseControls,
   Rect,
   Sound,
+  SoundBuffer,
   SoundPool,
   SoundGroup,
   Sprite,
@@ -47,5 +50,6 @@ export default {
   TwinStickControls,
   Vec,
   visibleInViewport,
-  wallSlide
+  wallSlide,
+  webAudio
 };

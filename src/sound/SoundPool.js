@@ -1,19 +1,18 @@
 import Sound from "./Sound";
 
 class SoundPool {
-  constructor(src, poolSize, soundOptions) {
-    this.playCount = 0;
+  constructor(src, options = {}, poolSize = 3) {
+    this.count = 0;
     this.sounds = Array.from(
       Array(poolSize),
-      () => new Sound(src, soundOptions)
-    );
+      () => new Sound(src, options));
   }
 
   // play one of audio instance of the pool
-  play(opts) {
+  play(options) {
     const { sounds } = this;
-    const index = this.playCount++ % sounds.length;
-    sounds[index].play(opts);
+    const index = this.count++ % sounds.length;
+    sounds[index].play(options);
   }
 
   // stop ALL audio instance of the pool
