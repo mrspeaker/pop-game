@@ -1,3 +1,6 @@
+import * as glutils from "./glutils";
+import defaultShader from "./defaultShader";
+
 class WebGL2Renderer {
   constructor(w, h) {
     const canvas = document.createElement("canvas");
@@ -12,6 +15,8 @@ class WebGL2Renderer {
 
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
+
+    glutils.createProgram(gl, defaultShader.vertex, defaultShader.fragment);
   }
 
   render(container, overwrite = false) {
@@ -45,10 +50,7 @@ class WebGL2Renderer {
           } else {
             // Render full texture
           }
-          // HACK: just testing rendering.
-          gl.scissor(child.pos.x, h -  child.pos.y - child.tileH, child.tileW, child.tileH);
-          gl.clearColor(Math.random(), Math.random(), Math.random(), 1.0);
-          gl.clear(gl.COLOR_BUFFER_BIT);
+          gl.drawArrays(gl.POINTS, 0, 1);
         }
 
         if (child.children) {
