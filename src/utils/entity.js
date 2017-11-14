@@ -1,5 +1,5 @@
 import math from "./math";
-import Rect from "./Rect";
+import Rect from "../Rect";
 
 function addDebug(entity) {
   entity.children = entity.children || [];

@@ -13,6 +13,12 @@ class CanvasRenderer {
     const { ctx } = this;
 
     function render(container) {
+
+      if (container.visible === false || container.alpha === 0) {
+        return;
+      }
+      // Apply container alpha.
+      
       // Render the container children
       container.children.forEach(child => {
         // Don't render self (or children) if not visible

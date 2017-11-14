@@ -1,6 +1,7 @@
 import Assets from "./Assets";
 import Container from "./Container";
 import CanvasRenderer from "./renderer/CanvasRenderer";
+import WebGL2Renderer from "./renderer/WebGL2Renderer";
 import screenCapture from "./utils/screenCapture";
 
 const STEP = 1 / 60;
@@ -12,7 +13,8 @@ class Game {
   constructor(w, h) {
     this.w = w;
     this.h = h;
-    this.renderer = new CanvasRenderer(w, h);
+    //this.renderer = new CanvasRenderer(w, h);
+    this.renderer = new WebGL2Renderer(w, h);
     document.querySelector("#board").appendChild(this.renderer.view);
     screenCapture(this.renderer.view);
 

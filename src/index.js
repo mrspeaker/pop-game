@@ -22,7 +22,7 @@ import TileSprite from "./TileSprite";
 import TwinStickControls from "./controls/TwinStickControls";
 import Vec from "./utils/Vec";
 import visibleInViewport from "./utils/visibleInViewport";
-import wallSlide from "./movement/wallSlide";
+import wallslide from "./movement/wallslide";
 import webAudio from "./sound/webAudio";
 
 export default {
@@ -50,6 +50,6 @@ export default {
   TwinStickControls,
   Vec,
   visibleInViewport,
-  wallSlide,
+  wallslide,
   webAudio
 };
