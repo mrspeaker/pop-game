@@ -4,12 +4,19 @@ class WebGL2Renderer {
     this.w = canvas.width = w;
     this.h = canvas.height = h;
     this.view = canvas;
-    this.ctx = canvas.getContext("webgl2");
+    const gl = canvas.getContext("webgl2");
+    if (!gl) {
+      throw new Error("WebGL2 not available");
+    }
+    this.ctx = gl;
+
+    gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
   }
 
   render(container, overwrite = false) {
     // Render the container
-    const { ctx } = this;
+    const { ctx:gl, h } = this;
 
     function render(container) {
       // Render the container children
@@ -38,6 +45,10 @@ class WebGL2Renderer {
           } else {
             // Render full texture
           }
+          // HACK: just testing rendering.
+          gl.scissor(child.pos.x, h -  child.pos.y - child.tileH, child.tileW, child.tileH);
+          gl.clearColor(Math.random(), Math.random(), Math.random(), 1.0);
+          gl.clear(gl.COLOR_BUFFER_BIT);
         }
 
         if (child.children) {
@@ -46,10 +57,12 @@ class WebGL2Renderer {
       });
     }
 
+    gl.enable(gl.SCISSOR_TEST);
     if (!overwrite) {
       // Clear background.
     }
     render(container);
+    gl.disable(gl.SCISSOR_TEST);
   }
 }
 

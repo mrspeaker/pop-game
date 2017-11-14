@@ -1,7 +1,7 @@
 import pop from "./src";
 const { Game, KeyControls } = pop;
 
-const game = new Game(800, 600);
+const game = new Game(800, 600, Math.random() < 0.5);
 const { scene, w, h } = game;
 
 const controls = new KeyControls();

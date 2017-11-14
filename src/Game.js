@@ -10,11 +10,10 @@ const SPEED = STEP * MULTIPLIER;
 const MAX_FRAME = SPEED * 5 * 1000;
 
 class Game {
-  constructor(w, h) {
+  constructor(w, h, useWebGL = false) {
     this.w = w;
     this.h = h;
-    //this.renderer = new CanvasRenderer(w, h);
-    this.renderer = new WebGL2Renderer(w, h);
+    this.renderer = useWebGL ? new WebGL2Renderer(w, h) : new CanvasRenderer(w, h);
     document.querySelector("#board").appendChild(this.renderer.view);
     screenCapture(this.renderer.view);
 
