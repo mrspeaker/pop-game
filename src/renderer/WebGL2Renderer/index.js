@@ -17,21 +17,24 @@ class WebGL2Renderer {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     this.textures = {};
+    const program = glutils.createProgram(
+      gl,
+      defaultShader.vertex,
+      defaultShader.fragment
+    );
+
     this.programs = {
       default: {
-        program: glutils.createProgram(
-          gl,
-          defaultShader.vertex,
-          defaultShader.fragment
-        ),
+        program,
+        attribs: {
+          pos: gl.getAttribLocation(program, "pos")
+        },
         uniforms: {
-          pos: null
+          color: gl.getUniformLocation(program, "color")
         }
       }
     };
-    const program = this.programs.default;
-    program.uniforms.pos = gl.getAttribLocation(program.program, "pos");
-    this.program = program;
+    this.program = this.programs.default;
   }
 
   render(container, overwrite = false) {
@@ -66,10 +69,11 @@ class WebGL2Renderer {
             // Render full texture
           }
           gl.vertexAttrib2f(
-            program.uniforms.pos,
+            program.attribs.pos,
             child.pos.x / w * 2 - 1,
             (1 - child.pos.y / h) * 2 - 1
           );
+          gl.uniform4f(program.uniforms.color, 1, 0.3, 0.3, 1);
           gl.drawArrays(gl.POINTS, 0, 1);
         }
 
@@ -79,12 +83,10 @@ class WebGL2Renderer {
       });
     }
 
-    gl.enable(gl.SCISSOR_TEST);
     if (!overwrite) {
       // Clear background.
     }
     render(container);
-    gl.disable(gl.SCISSOR_TEST);
   }
 }
 

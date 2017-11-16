@@ -10,10 +10,14 @@ const vertex = `#version 300 es
 
 const fragment = `#version 300 es
   precision mediump float;
-
-  out vec4 color;
+  uniform vec4 color;
+  out vec4 c;
   void main() {
-    color = vec4(1.0, 0.5, 0.0, 1.0);
+    if (distance(gl_PointCoord.xy, vec2(0.5, 0.5)) < 0.5) {
+      c = color;
+    } else {
+      discard;
+    }
   }
 `;
 
