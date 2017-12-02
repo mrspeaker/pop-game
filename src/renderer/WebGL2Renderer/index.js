@@ -1,26 +1,6 @@
 import * as glutils from "./glutils";
 import defaultShader from "./defaultShader";
 
-const textures = {};
-function getGLTexture(gl, popTexture) {
-  const { img } = popTexture;
-  const { src } = img;
-  if (textures[src]) {
-    return textures[src];
-  }
-  const texId = 0;
-  const tex = gl.createTexture();
-  gl.activeTexture(gl.TEXTURE0 + texId);
-  gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-  textures[src] = tex;
-  return tex;
-}
-
 class WebGL2Renderer {
   constructor(w, h) {
     const canvas = document.createElement("canvas");
@@ -33,7 +13,7 @@ class WebGL2Renderer {
     }
     this.ctx = gl;
 
-    gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     this.textures = {};
@@ -48,7 +28,7 @@ class WebGL2Renderer {
         program,
         attribs: {
           pos: gl.getAttribLocation(program, "pos"),
-          uv: gl.getAttribLocation(program, "uv"),
+          uv: gl.getAttribLocation(program, "uv")
         },
         uniforms: {
           color: gl.getUniformLocation(program, "img")
@@ -83,9 +63,7 @@ class WebGL2Renderer {
         } else if (child.path) {
           // Render path
         } else if (child.texture) {
-          const texture = getGLTexture(gl, child.texture);
-
-          const img = child.texture.img;
+          glutils.getTexture(gl, child.texture);
           if (child.tileW) {
             // Render tile
           } else {
@@ -96,7 +74,6 @@ class WebGL2Renderer {
             child.pos.x / w * 2 - 1,
             (1 - child.pos.y / h) * 2 - 1
           );
-          //gl.uniform4f(program.uniforms.color, 1, 0.3, 0.3, 1);
           gl.drawArrays(gl.POINTS, 0, 1);
         }
 
