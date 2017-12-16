@@ -1,7 +1,7 @@
 import pop from "./src";
 const { Game, KeyControls, math } = pop;
 
-const game = new Game(800, 600, true);
+const game = new Game(800, 600, "#board");
 const { scene, w, h } = game;
 
 const controls = new KeyControls();
@@ -20,5 +20,5 @@ for (let i = 0; i < 20; i++) {
 game.run((dt, t) => {
   const { x } = controls;
   pos.x += 200 * dt * Math.sign(x);
-  pos.y += Math.sin(t / 100) * 20 * dt;
+  pos.y += Math.sin(t * 10) * 80 * dt;
 });

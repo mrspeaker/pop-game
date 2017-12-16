@@ -6,19 +6,16 @@ class CanvasRenderer {
     this.view = canvas;
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
+    this.ctx.textBaseline = "top";
   }
 
-  render(container) {
-    // Render the container
+  render(container, clear = true) {
+    if (container.visible === false) {
+      return;
+    }
     const { ctx } = this;
 
-    function render(container) {
-
-      if (container.visible === false || container.alpha === 0) {
-        return;
-      }
-      // Apply container alpha.
-      
+    function renderRec(container) {
       // Render the container children
       container.children.forEach(child => {
         // Don't render self (or children) if not visible
@@ -48,9 +45,18 @@ class CanvasRenderer {
         }
 
         if (child.text) {
-          ctx.font = child.style.font;
-          ctx.fillStyle = child.style.fill;
-          ctx.fillText(child.text, -px, -py);
+          const { align, fill, font, stroke, lineWidth } = child.style;
+          if (font) ctx.font = font;
+          if (align) ctx.textAlign = align;
+          if (fill) {
+            ctx.fillStyle = fill;
+            ctx.fillText(child.text, -px, -py);
+          }
+          if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = lineWidth || 1;
+            ctx.strokeText(child.text, -px, -py);
+          }
         } else if (child.style && child.w && child.h) {
           ctx.fillStyle = child.style.fill;
           ctx.fillRect(-px, -py, child.w, child.h);
@@ -85,15 +91,17 @@ class CanvasRenderer {
 
         // Handle the child types
         if (child.children) {
-          render(child);
+          renderRec(child);
         }
 
         ctx.restore();
       });
     }
 
-    ctx.clearRect(0, 0, this.w, this.h);
-    render(container);
+    if (clear) {
+      ctx.clearRect(0, 0, this.w, this.h);
+    }
+    renderRec(container);
   }
 }
 

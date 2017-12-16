@@ -52,12 +52,12 @@ class WebGL2Renderer {
 
         // Apply alpha
         // Apply pivot
-        // Apply translate
-        // Apply scale
-        // Apply rotation
+        // Apply translate (use affine)
+        //  Apply scale
+        //  Apply rotation
 
         if (child.text) {
-          // Render text
+          // Render text... cache as bitmap?
         } else if (child.style && child.w && child.h) {
           // Render solid rectangle
         } else if (child.path) {
