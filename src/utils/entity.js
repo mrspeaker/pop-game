@@ -71,9 +71,9 @@ function getCenter(entity) {
 
 function overlaps(a, b) {
   return a.x + a.w >= b.x &&
-    a.x <= b.x + b.w &&
+    a.x < b.x + b.w &&
     a.y + a.h >= b.y &&
-    a.y <= b.y + b.h;
+    a.y < b.y + b.h;
 }
 
 function checkCollision(e1, e2, hitCallback) {
@@ -82,9 +82,9 @@ function checkCollision(e1, e2, hitCallback) {
 
   if (
     a.x + a.w >= b.x &&
-    a.x <= b.x + b.w &&
+    a.x < b.x + b.w &&
     a.y + a.h >= b.y &&
-    a.y <= b.y + b.h) {
+    a.y < b.y + b.h) {
     hitCallback(e1, e2);
   }
 }
@@ -97,9 +97,9 @@ function checkCollisions(entity, container, hitCallback) {
 
     if (
       a.x + a.w >= b.x &&
-      a.x <= b.x + b.w &&
+      a.x < b.x + b.w &&
       a.y + a.h >= b.y &&
-      a.y <= b.y + b.h) {
+      a.y < b.y + b.h) {
       hitCallback(entity2);
     }
   });
