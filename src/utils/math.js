@@ -80,7 +80,7 @@ function randOneIn(max) {
 }
 
 function randOneFrom(items) {
-  return items[rand(0, items.length)];
+  return items[rand(items.length)];
 }
 
 const rnd = {

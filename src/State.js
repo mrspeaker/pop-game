@@ -5,9 +5,10 @@ class State {
 
   set(state) {
     this.last = this.state;
+    this.lastTime = this.time || 0;
     this.state = state;
     this.time = 0;
-    this.first = true;
+    this.justSetState = true;
   }
 
   get() {
@@ -15,8 +16,9 @@ class State {
   }
 
   update(dt) {
-    this.first = false;
-    this.time += dt;
+    this.first = this.justSetState;
+    this.time += this.first ? 0 : dt;
+    this.justSetState = false;
   }
 
   is(state) {
@@ -25,6 +27,13 @@ class State {
 
   isIn(...states) {
     return states.some(s => this.is(s));
+  }
+
+  back() {
+    const { last, lastTime } = this;
+    this.set(last);
+    this.time = lastTime;
+    this.justSetState = false;
   }
 }
 

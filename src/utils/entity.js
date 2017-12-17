@@ -76,6 +76,30 @@ function overlaps(a, b) {
     a.y < b.y + b.h;
 }
 
+function hit(e1, e2) {
+  const a = bounds(e1);
+  const b = bounds(e2);
+  return a.x + a.w >= b.x &&
+    a.x < b.x + b.w &&
+    a.y + a.h >= b.y &&
+    a.y < b.y + b.h;
+}
+
+function hits(entity, container, hitCallback) {
+  const a = bounds(entity);
+  container.map(e2 => {
+    const b = bounds(e2);
+    if (
+      a.x + a.w >= b.x &&
+      a.x < b.x + b.w &&
+      a.y + a.h >= b.y &&
+      a.y < b.y + b.h
+    ) {
+      hitCallback(e2);
+    }
+  });
+}
+
 function checkCollision(e1, e2, hitCallback) {
   const a = getBounds(e1);
   const b = getBounds(e2);
@@ -143,6 +167,8 @@ export default {
   distance,
   getBounds,
   getCenter,
+  hit, // TODO: hit wins I think... remove others.
+  hits,
   overlaps,
   checkCollision,
   checkCollisions,

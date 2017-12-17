@@ -55,7 +55,7 @@ class TileMap extends Container {
     return this.setFrameAtMapPos(this.pixelToMapPos(pos), frame);
   }
 
-  tilesAtCorners(bounds, xo, yo) {
+  tilesAtCorners(bounds, xo = 0, yo = 0) {
     return [
       [bounds.x, bounds.y], // Top-left
       [bounds.x + bounds.w, bounds.y], // Top-right
