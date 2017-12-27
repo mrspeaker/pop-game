@@ -28,16 +28,20 @@ function onAssetLoad(e) {
 
 // Helper function for queuing assets
 function load(url, maker) {
-  if (cache[url]) {
+  let cacheKey = url;
+  while(cacheKey.startsWith("../")) {
+    cacheKey = url.slice(3);
+  }
+  if (cache[cacheKey]) {
     console.log("cached", url);
-    return cache[url];
+    return cache[cacheKey];
   }
   console.log("load", url);
   const asset = maker(url, onAssetLoad);
   remaining++;
   total++;
 
-  cache[url] = asset;
+  cache[cacheKey] = asset;
   return asset;
 }
 

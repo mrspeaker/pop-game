@@ -35,8 +35,8 @@ class Game {
         last = t;
 
         while (dt >= SPEED) {
-          this.scene.update(STEP, t);
-          gameUpdate(STEP, t);
+          this.scene.update(STEP, t / MULTIPLIER);
+          gameUpdate(STEP, t / MULTIPLIER);
           dt -= SPEED;
         }
         this.renderer.render(this.scene, dt / SPEED);
