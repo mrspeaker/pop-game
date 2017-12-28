@@ -1,5 +1,5 @@
 import pop from "./src";
-const { Game, KeyControls, math, Matrix } = pop;
+const { Game, KeyControls, math, Matrix, SoundPool } = pop;
 
 const game = new Game(800, 600, "#board");
 const { scene, w, h } = game;
@@ -11,12 +11,13 @@ const { pos } = sprite;
 pos.x = w / 2 - 50;
 pos.y = h / 2 - 100;
 
+const pool = new SoundPool("/res/sounds/squawk3.mp3", {}, 10);
+
 //Affine Transformation Matrices
 const m1 = new Matrix();
 //m1.rotate(Math.PI);
 m1.translate(200, 100);
 m1.scale(2.5, 1.5);
-console.log(m1.toString(), m1.getScale());
 // https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix/13165#13165
 
 sprite.pos.copy(m1.getPos());
@@ -31,6 +32,10 @@ for (let i = 0; i < 20; i++) {
 }
 last.pos.x = pos.x + 50;
 last.pos.y = pos.y;
+
+
+const rate = 0.2;
+let next = rate;
 game.run((dt, t) => {
   const { x } = controls;
   pos.x += 200 * dt * Math.sign(x);
@@ -41,6 +46,12 @@ game.run((dt, t) => {
 
   last.pos.y += Math.sin(t * 10) * 200 * dt;
   last.pos.y += Math.sin(t * 11) * 200 * dt;
+
+  if (t > next) {
+    next = t + rate;
+  //  console.log("play")
+    pool.play();
+  }
 
   m1.rotate(0.1);
   sprite.rotation = m1.getRotation();

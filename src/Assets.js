@@ -29,7 +29,7 @@ function onAssetLoad(e) {
 // Helper function for queuing assets
 function load(url, maker) {
   let cacheKey = url;
-  while(cacheKey.startsWith("../")) {
+  while (cacheKey.startsWith("../")) {
     cacheKey = url.slice(3);
   }
   if (cache[cacheKey]) {
@@ -85,29 +85,33 @@ const Assets = {
       };
       audio.addEventListener("canplay", onLoad, false);
       return audio;
-    });
+    }).cloneNode();
   },
 
   soundBuffer(url, ctx) {
     return load(url, (url, onAssetLoad) =>
-      fetch(url).then(r => r.arrayBuffer()).then(
-        ab =>
-          new Promise(success => {
-            ctx.decodeAudioData(ab, buffer => {
-              onAssetLoad(url);
-              success(buffer);
-            });
-          })
-      )
+      fetch(url)
+        .then(r => r.arrayBuffer())
+        .then(
+          ab =>
+            new Promise(success => {
+              ctx.decodeAudioData(ab, buffer => {
+                onAssetLoad(url);
+                success(buffer);
+              });
+            })
+        )
     );
   },
 
   json(url) {
     return load(url, (url, onAssetLoad) =>
-      fetch(url).then(res => res.json()).then(json => {
-        onAssetLoad(url);
-        return json;
-      })
+      fetch(url)
+        .then(res => res.json())
+        .then(json => {
+          onAssetLoad(url);
+          return json;
+        })
     );
   }
 };

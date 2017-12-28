@@ -3,9 +3,8 @@ import Sound from "./Sound";
 class SoundPool {
   constructor(src, options = {}, poolSize = 3) {
     this.count = 0;
-    this.sounds = Array.from(
-      Array(poolSize),
-      () => new Sound(src, options));
+    this.sounds = [...Array(poolSize)]
+      .map(() => new Sound(src, options));
   }
 
   // play one of audio instance of the pool
