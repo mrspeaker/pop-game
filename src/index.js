@@ -2,8 +2,9 @@ import Assets from "./Assets";
 import Camera from "./Camera";
 import CanvasRenderer from "./renderer/CanvasRenderer";
 import Container from "./Container";
-import Game from "./Game";
 import entity from "./utils/entity";
+import Game from "./Game";
+import GamepadControls from "./controls/GamepadControls";
 import KeyControls from "./controls/KeyControls";
 import math from "./utils/math";
 import Matrix from "./utils/Matrix";
@@ -32,6 +33,7 @@ export default {
   CanvasRenderer,
   Container,
   Game,
+  GamepadControls,
   entity,
   KeyControls,
   math,
