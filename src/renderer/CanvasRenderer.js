@@ -28,20 +28,18 @@ class CanvasRenderer {
           ctx.globalAlpha = child.alpha;
         }
 
-        let px = child.pivot ? child.pivot.x : 0;
-        let py = child.pivot ? child.pivot.y : 0;
         if (child.pos) {
           ctx.translate(Math.round(child.pos.x), Math.round(child.pos.y));
         }
         if (child.scale) {
           ctx.scale(child.scale.x, child.scale.y);
         }
-        if (child.rotation) {
+        const px = child.pivot ? child.pivot.x : 0;
+        const py = child.pivot ? child.pivot.y : 0;
+        if (child.rotation || px || py) {
           ctx.translate(px, py);
           ctx.rotate(child.rotation);
           ctx.translate(-px, -py);
-          px = 0;
-          py = 0;
         }
 
         if (child.text) {
@@ -55,11 +53,11 @@ class CanvasRenderer {
           if (stroke) {
             ctx.strokeStyle = stroke;
             ctx.lineWidth = lineWidth || 1;
-            ctx.strokeText(child.text, -px, -py);
+            ctx.strokeText(child.text, 0, 0);
           }
         } else if (child.style && child.w && child.h) {
           ctx.fillStyle = child.style.fill;
-          ctx.fillRect(-px, -py, child.w, child.h);
+          ctx.fillRect(0, 0, child.w, child.h);
         } else if (child.path) {
           const [head, ...tail] = child.path;
           if (tail.length > 0) {
@@ -79,13 +77,13 @@ class CanvasRenderer {
               child.frame.y * child.tileH,
               child.tileW,
               child.tileH,
-              -px,
-              -py,
+              0,
+              0,
               child.tileW,
               child.tileH
             );
           } else {
-            ctx.drawImage(img, -px, -py);
+            ctx.drawImage(img, 0, 0);
           }
         }
 
