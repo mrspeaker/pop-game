@@ -48,7 +48,7 @@ class CanvasRenderer {
           if (align) ctx.textAlign = align;
           if (fill) {
             ctx.fillStyle = fill;
-            ctx.fillText(child.text, -px, -py);
+            ctx.fillText(child.text, 0, 0);
           }
           if (stroke) {
             ctx.strokeStyle = stroke;
