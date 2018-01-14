@@ -1,58 +1,146 @@
-/**
- * props:
-   - focus: an object with a .pos position, or an {x, y} object to focus on
-   - viewport: object of {w, h} for the width/height of the Canvas
-   - worldSize (optional): object of {w, h} of the game map
-   - scale (optional): number
-   - moveSpeed (optional): number
- */
 import Container from "./Container";
 import math from "./utils/math";
+import Vec from "./utils/Vec";
+import Rect from "./Rect";
 
 class Camera extends Container {
-  constructor(focus, viewport, worldSize = viewport, moveSpeed = 0.1) {
+  constructor(subject, viewport, worldSize = viewport) {
     super();
-    this.focus = focus.pos || focus;
-
-    const offset = { x: 0, y: 0 };
-    if (focus.w) {
-      offset.x += focus.w / 2;
-      offset.y += focus.h / 2;
-    }
-    if (focus.pivot) {
-      offset.x -= focus.pivot.x;
-      offset.y -= focus.pivot.y;
-    }
-    this.offset = offset;
-
+    this.pos = new Vec();
     this.viewport = viewport;
     this.worldSize = worldSize;
-    this.moveSpeed = moveSpeed;
-    this.focusOn(this.focus, 1);
+
+    // Debugging tracking rectangle
+    // this.deb = this.add(
+    //   new Rect(0, 0, {
+    //     fill: "rgba(255, 0, 0, 0.2)"
+    //   })
+    // );
+
+    this.shakePower = 0;
+    this.lastShake = new Vec();
+    this.flashTime = 0;
+    this.easing = 0.03;
+
+    this.setTracking(64, 48);
+    this.setSubject(subject);
   }
 
-  focusOn(pos, easingFactor) {
-    const { worldSize, viewport } = this;
+  setTracking(w, h) {
+    const { deb } = this;
+    this.tracking = new Vec(w, h);
+    if (deb) {
+      deb.w = w * 2;
+      deb.h = h * 2;
+    }
+  }
 
-    const centeredX = pos.x - viewport.w / 2;
+  setSubject(e) {
+    this.subject = e ? e.pos || e : this.pos;
+    this.offset = { x: 0, y: 0 };
+
+    // Center on the entity
+    if (e && e.w) {
+      this.offset.x += e.w / 2;
+      this.offset.y += e.h / 2;
+    }
+    if (e && e.pivot) {
+      this.offset.x -= e.pivot.x;
+      this.offset.y -= e.pivot.y;
+    }
+    this.focus(1);
+  }
+
+  flash(length = 0.2, color = "#fff") {
+    const { viewport } = this;
+    this.remove(this.flashRect);
+    this.flashRect = this.add(
+      new Rect(viewport.w, viewport.h, { fill: color })
+    );
+    this.flashRect.pos = Vec.from(this.pos).multiply(-1);
+    this.flashLength = length;
+    this.flashTime = this.flashLength;
+  }
+
+  shake(power = 5) {
+    this.shakePower = power;
+  }
+
+  _shake() {
+    const { pos, shakePower, lastShake } = this;
+    if (shakePower < 0) {
+      lastShake.set(0, 0);
+      return;
+    }
+    lastShake.set(
+      math.randf(-shakePower, shakePower),
+      math.randf(-shakePower, shakePower)
+    );
+
+    pos.add(lastShake);
+    this.shakePower -= 0.2;
+  }
+
+  _unShake() {
+    const { pos, lastShake } = this;
+    pos.subtract(lastShake);
+  }
+
+  _flash(dt) {
+    const { flashTime, flashRect } = this;
+    if (flashTime < 0) {
+      return;
+    }
+
+    if ((this.flashTime -= dt) <= 0) {
+      this.remove(flashRect);
+    } else {
+      flashRect.opacity = this.flashTime / this.flashLength;
+    }
+  }
+
+  focus(ease = 1) {
+    const { pos, worldSize, viewport, subject, offset, tracking, deb } = this;
+
+    const target = subject || pos;
+
+    const centeredX = target.x + offset.x - viewport.w / 2;
     const maxX = worldSize.w - viewport.w;
-    const x = -math.clamp(centeredX, 0, maxX);
+    let x = -math.clamp(centeredX, 0, maxX);
 
-    const centeredY = pos.y - viewport.h / 2;
+    const centeredY = target.y + offset.y - viewport.h / 2;
     const maxY = worldSize.h - viewport.h;
-    const y = -math.clamp(centeredY, 0, maxY);
+    let y = -math.clamp(centeredY, 0, maxY);
 
-    // Ease between the current position and the new position
-    this.pos.x = math.mix(this.pos.x, x, easingFactor);
-    this.pos.y = math.mix(this.pos.y, y, easingFactor);
+    if (deb) {
+      deb.pos.set(
+        -pos.x + viewport.w / 2 - tracking.x,
+        -pos.y + viewport.h / 2 - tracking.y
+      );
+    }
+
+    if (tracking) {
+      // Tracking box
+      if (Math.abs(centeredX + pos.x) < tracking.x) {
+        x = pos.x;
+      }
+      if (Math.abs(centeredY + pos.y) < tracking.y) {
+        y = pos.y;
+      }
+    }
+
+    pos.x = math.mix(pos.x, x, ease);
+    pos.y = math.mix(pos.y, y, ease);
   }
 
   update(dt, t) {
     super.update(dt, t);
-
-    const { focus, offset, moveSpeed } = this;
-    const pos = { x: focus.x + offset.x, y: focus.y + offset.y };
-    this.focusOn(pos, moveSpeed);
+    this._unShake();
+    if (this.subject) {
+      this.focus(this.easing);
+    }
+    this._shake();
+    this._flash(dt);
   }
 }
 
