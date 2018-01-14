@@ -10,7 +10,7 @@ class CanvasRenderer {
   }
 
   render(container, clear = true) {
-    if (container.visible === false) {
+    if (container.visible == false) {
       return;
     }
     const { ctx } = this;
@@ -19,29 +19,27 @@ class CanvasRenderer {
       // Render the container children
       container.children.forEach(child => {
         // Don't render self (or children) if not visible
-        if (child.visible === false || child.alpha === 0) {
+        if (child.visible == false || child.alpha === 0) {
           return;
         }
-
         ctx.save();
-        if (child.alpha) {
-          ctx.globalAlpha = child.alpha;
-        }
+        if (child.alpha) ctx.globalAlpha = child.alpha;
 
+        // Handle transforms
         if (child.pos) {
           ctx.translate(Math.round(child.pos.x), Math.round(child.pos.y));
         }
-        if (child.scale) {
-          ctx.scale(child.scale.x, child.scale.y);
-        }
-        const px = child.pivot ? child.pivot.x : 0;
-        const py = child.pivot ? child.pivot.y : 0;
-        if (child.rotation || px || py) {
+        if (child.anchor) ctx.translate(child.anchor.x, child.anchor.y);
+        if (child.scale) ctx.scale(child.scale.x, child.scale.y);
+        if (child.rotation) {
+          const px = child.pivot ? child.pivot.x : 0;
+          const py = child.pivot ? child.pivot.y : 0;
           ctx.translate(px, py);
           ctx.rotate(child.rotation);
           ctx.translate(-px, -py);
         }
 
+        // Draw the leaf nodes
         if (child.text) {
           const { align, fill, font, stroke, lineWidth } = child.style;
           if (font) ctx.font = font;
@@ -87,7 +85,7 @@ class CanvasRenderer {
           }
         }
 
-        // Handle the child types
+        // Render any child sub-nodes
         if (child.children) {
           renderRec(child);
         }
