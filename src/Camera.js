@@ -44,9 +44,9 @@ class Camera extends Container {
       this.offset.x += e.w / 2;
       this.offset.y += e.h / 2;
     }
-    if (e && e.pivot) {
-      this.offset.x -= e.pivot.x;
-      this.offset.y -= e.pivot.y;
+    if (e && e.anchor) {
+      this.offset.x -= e.anchor.x;
+      this.offset.y -= e.anchor.y;
     }
     this.focus(1);
   }
