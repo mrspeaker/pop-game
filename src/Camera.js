@@ -7,7 +7,8 @@ class Camera extends Container {
   constructor(subject, viewport, worldSize = viewport) {
     super();
     this.pos = new Vec();
-    this.viewport = viewport;
+    this.w = viewport.w;
+    this.h = viewport.h;
     this.worldSize = worldSize;
 
     // Debugging tracking rectangle
@@ -52,10 +53,10 @@ class Camera extends Container {
   }
 
   flash(length = 0.2, color = "#fff") {
-    const { viewport } = this;
+    const { w, h } = this;
     this.remove(this.flashRect);
     this.flashRect = this.add(
-      new Rect(viewport.w, viewport.h, { fill: color })
+      new Rect(w, h, { fill: color })
     );
     this.flashRect.pos = Vec.from(this.pos).multiply(-1);
     this.flashLength = length;
@@ -100,22 +101,22 @@ class Camera extends Container {
   }
 
   focus(ease = 1) {
-    const { pos, worldSize, viewport, subject, offset, tracking, deb } = this;
+    const { pos, w, h, worldSize, subject, offset, tracking, deb } = this;
 
     const target = subject || pos;
 
-    const centeredX = target.x + offset.x - viewport.w / 2;
-    const maxX = worldSize.w - viewport.w;
+    const centeredX = target.x + offset.x - w / 2;
+    const maxX = worldSize.w - w;
     let x = -math.clamp(centeredX, 0, maxX);
 
-    const centeredY = target.y + offset.y - viewport.h / 2;
-    const maxY = worldSize.h - viewport.h;
+    const centeredY = target.y + offset.y - h / 2;
+    const maxY = worldSize.h - h;
     let y = -math.clamp(centeredY, 0, maxY);
 
     if (deb) {
       deb.pos.set(
-        -pos.x + viewport.w / 2 - tracking.x,
-        -pos.y + viewport.h / 2 - tracking.y
+        -pos.x + w / 2 - tracking.x,
+        -pos.y + h / 2 - tracking.y
       );
     }
 
