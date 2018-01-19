@@ -7,7 +7,7 @@ import screenCapture from "./utils/screenCapture";
 const STEP = 1 / 60;
 const MULTIPLIER = 1;
 const SPEED = STEP * MULTIPLIER;
-const MAX_FRAME = SPEED * 10;
+const MAX_FRAME = SPEED * 5;
 
 class Game {
   constructor(w, h, parent = "#board", useWebGL) {
