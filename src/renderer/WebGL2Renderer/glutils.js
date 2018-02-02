@@ -26,6 +26,7 @@ export const createProgram = (gl, vs_src, fs_src) => {
   return program;
 };
 
+let texId = 0;
 const textures = {};
 export function getTexture(gl, popTexture) {
   const { img } = popTexture;
@@ -33,7 +34,6 @@ export function getTexture(gl, popTexture) {
   if (textures[src]) {
     return textures[src];
   }
-  const texId = 0;
   const tex = gl.createTexture();
   gl.activeTexture(gl.TEXTURE0 + texId);
   gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -42,6 +42,10 @@ export function getTexture(gl, popTexture) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-  textures[src] = tex;
+  textures[src] = {
+    id: texId,
+    tex
+  };
+  texId++;
   return tex;
 }

@@ -1,28 +1,27 @@
 const vertex = `#version 300 es
+  uniform float pointsize;
   in vec2 pos;
-  in vec2 uv;
 
-  out vec2 uvoff;
-  out vec2 posoff;
+  out float size;
   void main() {
-    uvoff = uv;
-    posoff = pos;
-    gl_PointSize = 64.0;
+    size = pointsize;
+    gl_PointSize = pointsize;
     gl_Position = vec4(pos, 1.0, 1.0);
   }
 `;
 
 const fragment = `#version 300 es
-  precision mediump float;
-  uniform sampler2D img;
+  precision highp float;
 
-  in vec2 uvoff;
-  in vec2 posoff;
+  uniform sampler2D img;
+  uniform vec2 frame;
+  in float size;
+
   out vec4 col;
   void main() {
-    vec4 tex = texture(img, gl_PointCoord.xy);
-    vec4 hueShift = vec4(sin(posoff.x), sin(posoff.y) - 0.6, 0, 0);
-    col = tex + hueShift;
+    vec2 ratio = size / vec2(textureSize(img, 0));
+    vec4 tex = texture(img, gl_PointCoord * ratio + frame * ratio);
+    col = tex;
     if (col.a == 0.0)
       discard;
   }

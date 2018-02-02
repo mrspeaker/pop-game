@@ -15,8 +15,9 @@ class WebGL2Renderer {
 
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    this.textures = {};
     const program = glutils.createProgram(
       gl,
       defaultShader.vertex,
@@ -27,11 +28,12 @@ class WebGL2Renderer {
       default: {
         program,
         attribs: {
-          pos: gl.getAttribLocation(program, "pos"),
-          uv: gl.getAttribLocation(program, "uv")
+          pos: gl.getAttribLocation(program, "pos")
         },
         uniforms: {
-          color: gl.getUniformLocation(program, "img")
+          img: gl.getUniformLocation(program, "img"),
+          pointsize: gl.getUniformLocation(program, "pointsize"),
+          frame: gl.getUniformLocation(program, "frame")
         }
       }
     };
@@ -50,30 +52,36 @@ class WebGL2Renderer {
           return;
         }
 
-        // Apply alpha
-        // Apply pivot
-        // Apply translate (use affine)
-        //  Apply scale
-        //  Apply rotation
+        // TODO: Apply alpha
+        // TODO: Apply pivot
+        // TODO: Apply translate
+        // TODO: Apply scale
+        // TODO: Apply rotation
 
         if (child.text) {
-          // Render text... cache as bitmap?
+          // TODO: Render text... cache as bitmap?
         } else if (child.style && child.w && child.h) {
-          // Render solid rectangle
+          // TODO: Render solid rectangle
         } else if (child.path) {
-          // Render path
+          // TODO: Render path
         } else if (child.texture) {
-          glutils.getTexture(gl, child.texture);
+          const tex = glutils.getTexture(gl, child.texture);
           if (child.tileW) {
             // Render tile
+            gl.uniform1f(program.uniforms.pointsize, child.tileW);
+            gl.uniform2f(program.uniforms.frame, child.frame.x, child.frame.y);
           } else {
             // Render full texture
+            gl.uniform1f(program.uniforms.pointsize, child.w);
+            gl.uniform2f(program.uniforms.frame, 0, 0);
           }
+          gl.uniform1i(program.uniforms.img, tex.id);
           gl.vertexAttrib2f(
             program.attribs.pos,
             child.pos.x / w * 2 - 1,
             (1 - child.pos.y / h) * 2 - 1
           );
+          // TODO: Use geom, not Point Sprites. for one thing - points must be squares! Sorry.
           gl.drawArrays(gl.POINTS, 0, 1);
         }
 
@@ -84,7 +92,7 @@ class WebGL2Renderer {
     }
 
     if (!overwrite) {
-      // Clear background.
+      // TODO: Clear/don't clear background.
     }
     render(container);
   }
