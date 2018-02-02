@@ -4,40 +4,15 @@ game library.
 
 ## Run example
 
+Runs in modern browsers using native modules (just double-click `index-native` in Firefox). You'll need to serve the example using any webserver for chrome. If you have an olden days browser you can do the npm build dance:
+
 ```
 npm install
 npm start
 ```
 
-This runs a web server and serves the example in `test.js`. Browse on http://localhost:9966.
-Any example using the `Game` helper can take screen shot with `~` key.
+This downloads the internet then runs a web server and serves the example in `test.js`. Browse on http://localhost:9966.
 
 ## The library
 
-```
-Assets
-Camera
-CanvasRenderer - renderer/
-Container
-Game
-entity - utils/
-GamepadControls - controls/
-KeyControls - controls/
-math - utils/
-MouseControls - controls/
-physics - utils/
-Rect
-Sound - sound/
-SoundPool - sound/
-SoundGroup - sound/
-Sprite
-State
-Text
-Texture
-TileMap
-TileSprite
-TwinStickControls - controls/
-visibleInViewport
-wallSlide - movement/
-Vec - utils/
-```
+Docs to come.
