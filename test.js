@@ -20,9 +20,10 @@ for (let i = 0; i < 1500; i++) {
 
 scene.add(sprite);
 
-game.run(dt => {
+game.run((dt, t) => {
+  const yo = Math.sin(t / 0.2) * 40;
   sprite.pos.add({
     x: Math.sign(controls.x) * 200 * dt,
-    y: Math.sign(controls.y) * 200 * dt
+    y: (Math.sign(controls.y) * 200 + yo) * dt
   });
 });
