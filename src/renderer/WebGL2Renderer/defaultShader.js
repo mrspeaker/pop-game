@@ -11,7 +11,7 @@ const vertex = `#version 300 es
 `;
 
 const fragment = `#version 300 es
-  precision highp float;
+  precision mediump float;
 
   uniform sampler2D img;
   uniform vec2 frame;

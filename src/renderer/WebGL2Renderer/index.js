@@ -53,6 +53,7 @@ class WebGL2Renderer {
         }
 
         // TODO: Apply alpha
+        // (transforms...)
         // TODO: Apply pivot
         // TODO: Apply translate
         // TODO: Apply scale
