@@ -1,58 +1,27 @@
 import pop from "./src";
-const { Game, KeyControls, math, Matrix, SoundPool } = pop;
+const { Game, KeyControls, math, Sprite, Texture } = pop;
 
-const game = new Game(800, 600, "#board");
+const game = new Game(800, 600, "#board", true);
 const { scene, w, h } = game;
-
 const controls = new KeyControls();
 
-const sprite = scene.make.sprite("/res/images/greona.png");
-const { pos } = sprite;
-pos.x = w / 2 - 50;
-pos.y = h / 2 - 100;
-
-const pool = new SoundPool("/res/sounds/squawk3.mp3", {}, 10);
-
-//Affine Transformation Matrices
-const m1 = new Matrix();
-//m1.rotate(Math.PI);
-m1.translate(200, 100);
-m1.scale(2.5, 1.5);
-// https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix/13165#13165
-
-sprite.pos.copy(m1.getPos());
-sprite.scale = m1.getScale();
+const texture = new Texture("res/images/squizzball.png");
+const sprite = scene.add(new Sprite(texture));
+sprite.pos.set(game.w / 2, game.h / 2);
 
 let last;
-for (let i = 0; i < 20; i++) {
-  last = scene.make
-    .sprite("res/images/greona.png");
-    last
-    .pos.set(math.rand(0, w), math.rand(0, h));
+for (let i = 0; i < 200; i++) {
+  last = scene.add(new Sprite(texture));
+  last.pos.set(math.rand(0, w), math.rand(0, h));
 }
-last.pos.x = pos.x + 50;
-last.pos.y = pos.y;
+last.pos.copy(sprite.pos).add({ x: 50, y: 0 });
 
-
-const rate = 0.2;
-let next = rate;
 game.run((dt, t) => {
-  const { x } = controls;
-  pos.x += 200 * dt * Math.sign(x);
-  //pos.x += Math.cos(t * 10) * 200 * dt;
-  let y = Math.sin(t * 10) * 200;
-  y += Math.sin(t * 11) * 200;
-  pos.y += y * dt;
+  sprite.pos.add({
+    x: Math.sign(controls.x) * 200 * dt,
+    y: Math.sign(controls.y) * 200 * dt
+  });
 
   last.pos.y += Math.sin(t * 10) * 200 * dt;
   last.pos.y += Math.sin(t * 11) * 200 * dt;
-
-  if (t > next) {
-    next = t + rate;
-  //  console.log("play")
-    pool.play();
-  }
-
-  m1.rotate(0.1);
-  sprite.rotation = m1.getRotation();
 });

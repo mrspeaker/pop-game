@@ -21,6 +21,7 @@ CanvasRenderer - renderer/
 Container
 Game
 entity - utils/
+GamepadControls - controls/
 KeyControls - controls/
 math - utils/
 MouseControls - controls/

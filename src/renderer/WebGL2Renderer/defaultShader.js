@@ -7,7 +7,7 @@ const vertex = `#version 300 es
   void main() {
     uvoff = uv;
     posoff = pos;
-    gl_PointSize = 50.0;
+    gl_PointSize = 64.0;
     gl_Position = vec4(pos, 1.0, 1.0);
   }
 `;
@@ -21,7 +21,7 @@ const fragment = `#version 300 es
   out vec4 col;
   void main() {
     vec4 tex = texture(img, gl_PointCoord.xy);
-    vec4 hueShift = vec4(sin(posoff.x), sin(posoff.y), 0, 0);
+    vec4 hueShift = vec4(sin(posoff.x), sin(posoff.y) - 0.6, 0, 0);
     col = tex + hueShift;
     if (col.a == 0.0)
       discard;

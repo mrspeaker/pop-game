@@ -30,20 +30,6 @@ class Container {
       return child.dead ? false : true;
     });
   }
-
-  // TODO: is this a good idea? Not really common outside of very simple entities
-  get make() {
-    return {
-      sprite: path => this.add(
-        new Sprite(new Texture(path))
-      ),
-      tileSprite: (path, w, h) => {
-        return this.add(
-          new TileSprite(new Texture(path), w, h)
-        );
-      }
-    };
-  }
 }
 
 export default Container;
