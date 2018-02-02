@@ -1,7 +1,5 @@
 class TwinStickControls {
 
-  _keys = {};
-
   constructor () {
 
     // Bind event handlers
@@ -15,6 +13,8 @@ class TwinStickControls {
     document.addEventListener("keyup", e => {
       this._keys[e.which] = false;
     }, false);
+
+    this._keys = {};
 
   }
 

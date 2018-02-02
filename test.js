@@ -1,4 +1,4 @@
-import pop from "./src";
+import pop from "./src/index.js";
 const { Game, KeyControls, math, Sprite, TileSprite, Texture } = pop;
 
 const useWebGl2 = true;

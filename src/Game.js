@@ -1,8 +1,8 @@
-import Assets from "./Assets";
-import Container from "./Container";
-import CanvasRenderer from "./renderer/CanvasRenderer";
-import WebGL2Renderer from "./renderer/WebGL2Renderer";
-import screenCapture from "./utils/screenCapture";
+import Assets from "./Assets.js";
+import Container from "./Container.js";
+import CanvasRenderer from "./renderer/CanvasRenderer.js";
+import WebGL2Renderer from "./renderer/WebGL2Renderer/index.js";
+import screenCapture from "./utils/screenCapture.js";
 
 const STEP = 1 / 60;
 const MULTIPLIER = 1;

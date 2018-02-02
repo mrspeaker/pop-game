@@ -1,4 +1,4 @@
-import Sound from "./Sound";
+import Sound from "./Sound.js";
 
 class SoundPool {
   constructor(src, options = {}, poolSize = 3) {

@@ -1,5 +1,5 @@
-import * as glutils from "./glutils";
-import defaultShader from "./defaultShader";
+import * as glutils from "./glutils.js";
+import defaultShader from "./defaultShader.js";
 
 class WebGL2Renderer {
   constructor(w, h) {

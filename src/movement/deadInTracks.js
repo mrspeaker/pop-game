@@ -1,4 +1,4 @@
-import entity from "../utils/entity";
+import entity from "../utils/entity.js";
 
 function deadInTracks(ent, map, x = 0, y = 0) {
   const bounds = entity.bounds(ent);

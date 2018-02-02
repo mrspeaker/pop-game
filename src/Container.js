@@ -1,6 +1,6 @@
-import Sprite from "./Sprite";
-import Texture from "./Texture";
-import TileSprite from "./TileSprite";
+import Sprite from "./Sprite.js";
+import Texture from "./Texture.js";
+import TileSprite from "./TileSprite.js";
 
 class Container {
   constructor() {

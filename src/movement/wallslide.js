@@ -1,4 +1,4 @@
-import entity from "../utils/entity";
+import entity from "../utils/entity.js";
 
 /*
   Expects:

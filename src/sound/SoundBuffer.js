@@ -1,5 +1,5 @@
-import Assets from "../Assets";
-import webAudio from "./webAudio";
+import Assets from "../Assets.js";
+import webAudio from "./webAudio.js";
 
 const { ctx, master } = webAudio;
 

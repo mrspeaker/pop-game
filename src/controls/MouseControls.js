@@ -1,15 +1,5 @@
 class MouseControls {
 
-  pos = { x: 0, y: 0 };
-  worldPos = { x: 0, y: 0 };
-
-  left = {
-    isDown: false,
-    pressed: false,
-    released: false,
-    duration: 0
-  };
-
   constructor (container) {
     this.el = container || document.body;
 
@@ -17,6 +7,16 @@ class MouseControls {
     document.addEventListener("mousedown", this.down.bind(this), false);
     document.addEventListener("mouseup", this.up.bind(this), false);
     document.addEventListener("mousemove", this.move.bind(this), false);
+
+    this.pos = { x: 0, y: 0 };
+    this.worldPos = { x: 0, y: 0 };
+
+    this.left = {
+      isDown: false,
+      pressed: false,
+      released: false,
+      duration: 0
+    };
   }
 
   mousePosFromEvent (e) {

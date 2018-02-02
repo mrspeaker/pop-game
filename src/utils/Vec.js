@@ -1,5 +1,5 @@
 class Vec {
-  static from = v => new Vec().copy(v);
+  // static from = v => new Vec().copy(v);
 
   constructor(x = 0, y = 0) {
     this.set(x, y);
@@ -63,5 +63,9 @@ class Vec {
     return this.x * x + this.y * y;
   }
 }
+
+Vec.from = function (v) {
+  return new Vec().copy(v);
+};
 
 export default Vec;

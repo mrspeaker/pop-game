@@ -1,5 +1,5 @@
-import math from "./math";
-import Rect from "../Rect";
+import math from "./math.js";
+import Rect from "../Rect.js";
 
 function addDebug(entity) {
   entity.children = entity.children || [];

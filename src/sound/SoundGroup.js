@@ -1,4 +1,4 @@
-import math from "../utils/math";
+import math from "../utils/math.js";
 
 class SoundGroup {
   constructor(sounds) {

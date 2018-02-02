@@ -1,7 +1,7 @@
-import Container from "./Container";
-import math from "./utils/math";
-import Vec from "./utils/Vec";
-import Rect from "./Rect";
+import Container from "./Container.js";
+import math from "./utils/math.js";
+import Vec from "./utils/Vec.js";
+import Rect from "./Rect.js";
 
 class Camera extends Container {
   constructor(subject, viewport, worldSize = viewport) {

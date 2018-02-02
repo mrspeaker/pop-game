@@ -5,9 +5,8 @@
   "description": "MomPop's game library",
   "main": "src/index.js",
   "scripts": {
-    "start": "budo test.js:bundle.js --live -- -t [ babelify --presets [ env ] --plugins [ 'transform-class-properties' ] ]",
-    "build": "browserify test.js -o bundle.js -t [ babelify --presets [ env ] --plugins [ 'transform-class-properties' ] ]"
-
+    "start": "budo test.js:bundle.js --live -- -t [ babelify --presets [ env ] ]",
+    "build": "browserify test.js -o bundle.js -t [ babelify --presets [ env ] ]"
   },
   "keywords": [],
   "author": "Mr Speaker",
@@ -15,7 +14,6 @@
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-plugin-transform-class-properties": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
     "browserify": "^15.2.0",

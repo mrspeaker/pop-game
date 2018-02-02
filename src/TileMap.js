@@ -1,5 +1,5 @@
-import Container from "./Container";
-import TileSprite from "./TileSprite";
+import Container from "./Container.js";
+import TileSprite from "./TileSprite.js";
 
 class TileMap extends Container {
   constructor(tiles, mapW, mapH, tileW, tileH, texture) {

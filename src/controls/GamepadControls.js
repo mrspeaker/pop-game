@@ -14,8 +14,9 @@ class GamepadControls {
     this.controllers = {};
 
     this.threshold = 0.21;
+    this.handler = this.handler.bind(this);
   }
-  handler = ({ gamepad }, connecting) => {
+  handler ({ gamepad }, connecting) {
     const { controllers } = this;
     if (connecting) {
       controllers[gamepad.index] = gamepad;
@@ -23,7 +24,7 @@ class GamepadControls {
     } else {
       delete controllers[gamepad.index];
     }
-  };
+  }
 
   action(...buttons) {
     const { controller } = this;

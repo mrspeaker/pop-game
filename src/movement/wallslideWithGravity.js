@@ -1,4 +1,4 @@
-import entity from "../utils/entity";
+import entity from "../utils/entity.js";
 
 /*
   Not used: was first pass for gravity, before "hits" were introduced.

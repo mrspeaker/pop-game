@@ -1,4 +1,4 @@
-import Vec from "./utils/Vec";
+import Vec from "./utils/Vec.js";
 
 class Sprite {
   constructor(texture) {
