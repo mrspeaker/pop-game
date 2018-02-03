@@ -5,11 +5,11 @@ class Texture {
     this.img = Assets.image(url);
   }
 
-  get w () {
+  get w() {
     return this.img.width;
   }
 
-  get h () {
+  get h() {
     return this.img.height;
   }
 }

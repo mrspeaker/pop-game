@@ -55,12 +55,10 @@ function normalize({ x, y }) {
   const length = Math.sqrt(x * x + y * y);
   x /= length;
   y /= length;
-  return { x, y };
-}
-
-// re-made this as randOneFrom... which is better?
-function pick(arr) {
-  return arr[rand(arr.length)];
+  return {
+    x,
+    y
+  };
 }
 
 function rand(min, max) {
@@ -110,7 +108,6 @@ export default {
   lerp,
   mix,
   normalize,
-  pick,
   rand,
   randf,
   randOneIn,

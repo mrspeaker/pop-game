@@ -15,15 +15,22 @@ class KeyControls {
     }, false);
   }
 
+  key(key, value) {
+    if (value !== undefined) {
+      this.keys[key] = value;
+    }
+    return this.keys[key];
+  }
+
+  reset () {
+    for (let key in this.keys) {
+      this.keys[key] = false;
+    }
+  }
+
   // Handle key actions
   get action() {
     return this.keys[32];
-  }
-
-  reset() {
-    for (var key in this.keys) {
-      this.keys[key] = false;
-    }
   }
 
   get x() {
@@ -45,15 +52,6 @@ class KeyControls {
     }
     return 0;
   }
-
-  key(keyCode) {
-    return this.keys[keyCode];
-  }
-
-  unset(keyCode) {
-    this.keys[keyCode] = false;
-  }
-
 }
 
 export default KeyControls;

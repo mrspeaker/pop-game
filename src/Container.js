@@ -1,7 +1,3 @@
-import Sprite from "./Sprite.js";
-import Texture from "./Texture.js";
-import TileSprite from "./TileSprite.js";
-
 class Container {
   constructor() {
     this.pos = { x: 0, y: 0 };

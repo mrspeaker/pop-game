@@ -3,7 +3,7 @@ import Rect from "../Rect.js";
 
 function addDebug(entity) {
   entity.children = entity.children || [];
-  const bb = new Rect(entity.w, entity.h, { fill: "rgba(255, 0, 0, 0.3)"});
+  const bb = new Rect(entity.w, entity.h, { fill: "rgba(255, 0, 0, 0.3)" });
   entity.children.push(bb);
   if (entity.hitBox) {
     const { x, y, w, h } = entity.hitBox;
@@ -20,9 +20,7 @@ function angle(a, b) {
 }
 
 function center(entity) {
-  const {
-    pos, w, h
-  } = entity;
+  const { pos, w, h } = entity;
   return {
     x: pos.x + w / 2,
     y: pos.y + h / 2
@@ -39,8 +37,8 @@ function bounds(entity) {
   const sx = Math.abs(scale.x || 1);
   const sy = Math.abs(scale.y || 1);
   return {
-    x: (hit.x * sx) + pos.x,
-    y: (hit.y * sy) + pos.y,
+    x: hit.x * sx + pos.x,
+    y: hit.y * sy + pos.y,
     w: hit.w * sx,
     h: hit.h * sy
   };
@@ -64,25 +62,23 @@ function getBounds(entity) {
 function getCenter(entity) {
   var bounds = getBounds(entity);
   return {
-    x: bounds.x + (bounds.w / 2),
-    y: bounds.y + (bounds.h / 2)
+    x: bounds.x + bounds.w / 2,
+    y: bounds.y + bounds.h / 2
   };
 }
 
 function overlaps(a, b) {
-  return a.x + a.w >= b.x &&
-    a.x < b.x + b.w &&
-    a.y + a.h >= b.y &&
-    a.y < b.y + b.h;
+  return (
+    a.x + a.w >= b.x && a.x < b.x + b.w && a.y + a.h >= b.y && a.y < b.y + b.h
+  );
 }
 
 function hit(e1, e2) {
   const a = bounds(e1);
   const b = bounds(e2);
-  return a.x + a.w >= b.x &&
-    a.x < b.x + b.w &&
-    a.y + a.h >= b.y &&
-    a.y < b.y + b.h;
+  return (
+    a.x + a.w >= b.x && a.x < b.x + b.w && a.y + a.h >= b.y && a.y < b.y + b.h
+  );
 }
 
 function hits(entity, container, hitCallback) {
@@ -108,7 +104,8 @@ function checkCollision(e1, e2, hitCallback) {
     a.x + a.w >= b.x &&
     a.x < b.x + b.w &&
     a.y + a.h >= b.y &&
-    a.y < b.y + b.h) {
+    a.y < b.y + b.h
+  ) {
     hitCallback(e1, e2);
   }
 }
@@ -123,7 +120,8 @@ function checkCollisions(entity, container, hitCallback) {
       a.x + a.w >= b.x &&
       a.x < b.x + b.w &&
       a.y + a.h >= b.y &&
-      a.y < b.y + b.h) {
+      a.y < b.y + b.h
+    ) {
       hitCallback(entity2);
     }
   });
@@ -173,5 +171,5 @@ export default {
   checkCollision,
   checkCollisions,
   checkContainerCollisions,
-  checkChildrenCollisions,
+  checkChildrenCollisions
 };

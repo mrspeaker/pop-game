@@ -1,4 +1,5 @@
 class Vec {
+  // Adding to Class (below) until static props more supported
   // static from = v => new Vec().copy(v);
 
   constructor(x = 0, y = 0) {
