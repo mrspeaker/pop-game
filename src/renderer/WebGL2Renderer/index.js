@@ -28,21 +28,37 @@ class WebGL2Renderer {
       default: {
         program,
         attribs: {
-          pos: gl.getAttribLocation(program, "pos")
+          pos: gl.getAttribLocation(program, "pos"),
+          pointsize: gl.getAttribLocation(program, "pointsize"),
+          frame: gl.getAttribLocation(program, "frame")
         },
         uniforms: {
           img: gl.getUniformLocation(program, "img"),
-          pointsize: gl.getUniformLocation(program, "pointsize"),
-          frame: gl.getUniformLocation(program, "frame")
+          res: gl.getUniformLocation(program, "resolution"),
+        },
+        buffers: {
+          pos: gl.createBuffer()
         }
       }
     };
     this.program = this.programs.default;
+
+    const p = this.program;
+    gl.enableVertexAttribArray(p.attribs.pos);
+    gl.enableVertexAttribArray(p.attribs.pointsize);
+    gl.enableVertexAttribArray(p.attribs.frame);
   }
 
   render(container, overwrite = false) {
     // Render the container
     const { ctx: gl, w, h, program } = this;
+
+    const sprites = [];
+    let nbPoints = 0;
+    function addSprite (pos, size, frameX = 0, frameY = 0) {
+      sprites.push(pos.x, pos.y, size, frameX, frameY);
+      nbPoints++;
+    }
 
     function render(container) {
       // Render the container children
@@ -69,27 +85,29 @@ class WebGL2Renderer {
           const tex = glutils.getTexture(gl, child.texture);
           if (child.tileW) {
             // Render tile
-            gl.uniform1f(program.uniforms.pointsize, child.tileW);
-            gl.uniform2f(program.uniforms.frame, child.frame.x, child.frame.y);
+            addSprite(child.pos, child.tileW, child.frame.x, child.frame.y, tex.id);
           } else {
             // Render full texture
-            gl.uniform1f(program.uniforms.pointsize, child.w);
-            gl.uniform2f(program.uniforms.frame, 0, 0);
+            addSprite(child.pos, child.w);
           }
-          gl.uniform1i(program.uniforms.img, tex.id);
-          gl.vertexAttrib2f(
-            program.attribs.pos,
-            child.pos.x / w * 2 - 1,
-            (1 - child.pos.y / h) * 2 - 1
-          );
-          // TODO: Use geom, not Point Sprites. for one thing - points must be squares! Sorry.
-          gl.drawArrays(gl.POINTS, 0, 1);
+          //gl.uniform1i(program.uniforms.img, tex.id);
         }
 
         if (child.children) {
           render(child);
         }
       });
+
+      gl.uniform1i(program.uniforms.img, 0);
+      gl.uniform2f(program.uniforms.res, w, h);
+      gl.bindBuffer(gl.ARRAY_BUFFER, program.buffers.pos);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sprites), gl.DYNAMIC_DRAW);
+
+      gl.vertexAttribPointer(program.attribs.pos, 2, gl.FLOAT, false, 5 * 4, 0);
+      gl.vertexAttribPointer(program.attribs.pointsize, 1, gl.FLOAT, false, 5 * 4, 8);
+      gl.vertexAttribPointer(program.attribs.frame, 2, gl.FLOAT, false, 5 * 4, 12);
+
+      gl.drawArrays(gl.POINTS, 0, nbPoints);
     }
 
     if (!overwrite) {

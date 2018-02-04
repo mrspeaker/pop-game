@@ -24,8 +24,8 @@ class Game {
 
   run(gameUpdate = () => {}) {
     Assets.onReady(() => {
-      let dt = 0;
-      let last = 0;
+      let dt = STEP;
+      let last = performance.now() / 1000;
 
       const loopy = ms => {
         requestAnimationFrame(loopy);
