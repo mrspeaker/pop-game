@@ -2,6 +2,7 @@ import Assets from "./Assets.js";
 import Camera from "./Camera.js";
 import CanvasRenderer from "./renderer/CanvasRenderer.js";
 import Container from "./Container.js";
+import deadInTracks from "./movement/deadInTracks.js";
 import entity from "./utils/entity.js";
 import Game from "./Game.js";
 import GamepadControls from "./controls/GamepadControls.js";
@@ -32,6 +33,7 @@ export default {
   Camera,
   CanvasRenderer,
   Container,
+  deadInTracks,
   Game,
   GamepadControls,
   entity,

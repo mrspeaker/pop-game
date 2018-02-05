@@ -2,10 +2,9 @@ import entity from "../utils/entity.js";
 
 /*
   Expects:
-  * an entity with the following characteristics:
-    * pos vector, w & h
-  * a Pop Map for wallsliding.
-  * The x and y amount requesting to move
+  * an entity (with pos vector, w & h)
+  * a Pop TileMap
+  * The x and y amount *requesting* to move (no checks if 0)
 */
 
 function wallslide(ent, map, x = 0, y = 0) {
@@ -26,7 +25,7 @@ function wallslide(ent, map, x = 0, y = 0) {
     // Hit your head
     if (y < 0 && !(tl && tr)) {
       hits.up = true;
-      tileEdge = tiles[0].pos.y + tiles[0].h + 1;
+      tileEdge = tiles[0].pos.y + tiles[0].h;
       yo = tileEdge - bounds.y;
     }
     // Hit your feet
@@ -42,13 +41,13 @@ function wallslide(ent, map, x = 0, y = 0) {
     tiles = map.tilesAtCorners(bounds, xo, yo);
     const [tl, tr, bl, br] = tiles.map(t => t && t.frame.walkable);
 
-    // Hit left edge
+    // Hit left tile
     if (x < 0 && !(tl && bl)) {
       hits.left = true;
-      tileEdge = tiles[0].pos.x + tiles[0].w + 1;
+      tileEdge = tiles[0].pos.x + tiles[0].w;
       xo = tileEdge - bounds.x;
     }
-    // Hit right edge
+    // Hit right tile
     if (x > 0 && !(tr && br)) {
       hits.right = true;
       tileEdge = tiles[1].pos.x - 1;

@@ -9,7 +9,7 @@ function deadInTracks(ent, map, x = 0, y = 0) {
     x = 0;
     y = 0;
   }
-  return { x, y, blocked, walks, tiles };
+  return { x, y };
 }
 
 export default deadInTracks;
