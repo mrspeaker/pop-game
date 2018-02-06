@@ -1,6 +1,7 @@
 class Vec {
-  // Adding to Class (below) until static props more supported
-  // static from = v => new Vec().copy(v);
+  static from(v) {
+    return new Vec().copy(v);
+  }
 
   constructor(x = 0, y = 0) {
     this.set(x, y);
@@ -60,13 +61,9 @@ class Vec {
     return this;
   }
 
-  dot({x, y}) {
+  dot({ x, y }) {
     return this.x * x + this.y * y;
   }
 }
-
-Vec.from = function (v) {
-  return new Vec().copy(v);
-};
 
 export default Vec;
