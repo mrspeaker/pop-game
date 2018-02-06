@@ -24,12 +24,10 @@ class Game {
 
   run(gameUpdate = () => {}) {
     Assets.onReady(() => {
-      let dt = STEP;
-      let last = performance.now() / 1000;
-
+      let dt = 0;
+      let last = 0;
       const loopy = ms => {
         requestAnimationFrame(loopy);
-
         const t = ms / 1000; // Let's work in seconds
         dt += Math.min(t - last, MAX_FRAME);
         last = t;
@@ -41,7 +39,13 @@ class Game {
         }
         this.renderer.render(this.scene, dt / SPEED);
       };
-      requestAnimationFrame(loopy);
+
+      // Initialize the timer
+      const init = ms => {
+        last = ms / 1000;
+        requestAnimationFrame(loopy);
+      };
+      requestAnimationFrame(init);
     });
   }
 }
