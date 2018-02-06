@@ -30,6 +30,29 @@ const e2 = makeEnt(1, 1);
 const e3 = makeEnt(2, 2);
 const e4 = makeEnt(2, 2);
 
+///// Pre-bounds test
+
+const boundslessHit = (a, b) => (
+  a.pos.x + a.w - 1 >= b.pos.x &&
+  a.pos.x <= b.pos.x + b.w - 1 &&
+  a.pos.y + a.h - 1 >= b.pos.y &&
+  a.pos.y <= b.pos.y + b.h - 1
+);
+
+assert(boundslessHit(e1, e2), "hit simple (1x1)", e1.pos, e2.pos);
+e2.pos.set(1, 0);
+assert(!boundslessHit(e1, e2), "miss simple (1x1)", e1.pos, e2.pos);
+e2.pos.set(0, 1);
+assert(!boundslessHit(e1, e2), "miss simple, below (1x1)", e1.pos, e2.pos);
+
+assert(boundslessHit(e3, e4), "hit simple (2x2)", e3.pos, e4.pos);
+e4.pos.set(1, 1);
+assert(boundslessHit(e3, e4), "hit after move simple (2x2)", e3.pos, e4.pos);
+e4.pos.set(2, 0);
+assert(!boundslessHit(e3, e4), "miss simple (2x2)", e3.pos, e4.pos);
+
+//// Post-bounds tests
+
 assert(boundsEquals(e1, { x: 0, y: 0, w: 0, h: 0 }), "bounds for 1x1 sprite");
 assert(boundsEquals(e3, { x: 0, y: 0, w: 1, h: 1 }), "bounds for 2x2 sprite");
 
