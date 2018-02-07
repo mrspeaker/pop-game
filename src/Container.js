@@ -10,6 +10,7 @@ class Container {
   }
 
   remove(child) {
+    // TODO: replace with `for` loop too.
     this.children = this.children.filter(c => c !== child);
     return child;
   }
@@ -19,12 +20,16 @@ class Container {
   }
 
   update(dt, t) {
-    this.children = this.children.filter(child => {
+    for (let i = 0; i < this.children.length; i++) {
+      const child = this.children[i];
       if (child.update) {
         child.update(dt, t, this);
       }
-      return child.dead ? false : true;
-    });
+      if (child.dead) {
+        this.children.splice(i, 1);
+        i--;
+      }
+    }
   }
 }
 
