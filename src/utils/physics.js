@@ -4,6 +4,20 @@ function applyForce(e, force) {
   acc.y += force.y / mass;
 }
 
+function applyFriction(e, amount) {
+  const friction = e.vel.clone().multiply(-1).normalize().multiply(amount);
+  applyForce(e, friction);
+}
+
+function applyHorizontalFriction(e, amount) {
+  const friction = e.vel
+    .clone()
+    .multiply(-1)
+    .normalize()
+    .multiply(amount);
+  applyForce(e, { x: friction.x, y: 0 });
+}
+
 function applyImpulse(e, force, dt) {
   applyForce(e, { x: force.x / dt, y: force.y / dt });
 }
@@ -31,6 +45,8 @@ function speed({ vel }) {
 
 export default {
   applyForce,
+  applyFriction,
+  applyHorizontalFriction,
   applyImpulse,
   integrate,
   integratePos,
