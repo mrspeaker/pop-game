@@ -63,7 +63,7 @@ class Camera extends Container {
 
   _shake(dt) {
     const { pos, shakePower, shakeLast } = this;
-    if (shakePower < 0) {
+    if (shakePower <= 0) {
       shakeLast.set(0, 0);
       return;
     }
@@ -83,7 +83,7 @@ class Camera extends Container {
 
   flash(duration = 0.3, color = "#fff") {
     if (!this.flashRect) {
-      const { viewport: { w, h } } = this;
+      const { w, h } = this;
       this.flashRect = this.add(new Rect(w, h, { fill: color }));
     }
     this.flashRect.style.fill = color;
@@ -144,7 +144,7 @@ class Camera extends Container {
     if (this.subject) {
       this.focus(this.easing);
     }
-    this._shake();
+    this._shake(dt);
     this._flash(dt);
   }
 }
