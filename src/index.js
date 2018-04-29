@@ -1,7 +1,7 @@
 import Assets from "./Assets.js";
-import Container from "./Container.js";
 import Camera from "./Camera.js";
 import CanvasRenderer from "./renderer/CanvasRenderer.js";
+import Container from "./Container.js";
 import deadInTracks from "./movement/deadInTracks.js";
 import entity from "./utils/entity.js";
 import Game from "./Game.js";
@@ -19,7 +19,6 @@ import SoundGroup from "./sound/SoundGroup.js";
 import SoundPool from "./sound/SoundPool.js";
 import Sprite from "./Sprite.js";
 import State from "./State.js";
-import Stats from "./Stats.js";
 import Text from "./Text.js";
 import Texture from "./Texture.js";
 import tiledParser from "./utils/tiledParser.js";
@@ -29,7 +28,7 @@ import Timer from "./Timer.js";
 import Vec from "./utils/Vec.js";
 import wallslide from "./movement/wallslide.js";
 import webAudio from "./sound/webAudio.js";
-import WebGL2Renderer from "./renderer/WebGL2Renderer.js";
+import WebGL2Renderer from "./renderer/WebGL2Renderer/index.js";
 
 export default {
   Assets,
@@ -53,7 +52,6 @@ export default {
   SoundPool,
   Sprite,
   State,
-  Stats,
   Text,
   Texture,
   tiledParser,
