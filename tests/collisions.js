@@ -1,21 +1,10 @@
 import pop from "../src/index.js";
 const { entity, Vec, TileMap, wallslide } = pop;
+import utils from "./utils.js";
+const { log, assert } = utils;
 
-const dom = document.querySelector("#res");
-const log = (...msg) => (dom.innerHTML += msg.join("&nbsp") + "<br />");
-log("Sprite, TileMap, and wallslide collision tests");
-log("<br/>------");
-log("- Should print 'TESTS DONE' at bottom (check console for errors!)");
-log("------");
-const assert = (test, ...args) => {
-  if (!test) {
-    console.warn("Failed:", ...args);
-    log("🔴", [...args].map(a => JSON.stringify(a)));
-  } else {
-    console.log("Passed:", ...args);
-    log("🌳", [...args].map(a => JSON.stringify(a)));
-  }
-};
+log("<strong>Sprite, TileMap, and wallslide collision tests</strong>");
+log("<br/>--- Starting Sprite, TileMap, wallslide ---");
 
 const makeEnt = (w = 32, h = 32) => ({ w, h, pos: new Vec() });
 const boundsEquals = (e, bounds) => {
@@ -334,6 +323,4 @@ assert(
   r
 );
 
-log("------");
-log("- TESTS DONE");
-log("------");
+log("--- Done Sprite, TileMap, wallslide ---<br/>");
