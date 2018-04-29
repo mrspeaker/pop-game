@@ -14,8 +14,8 @@ function done() {
 // Called when a queued asset is ready to use
 function onAssetLoad(e) {
   if (completed) {
-    console.warn("Warning: asset defined after preload.", e.target);
-    return;
+    // Asset defined after preload.
+    return e;
   }
 
   remaining--;
@@ -28,20 +28,16 @@ function onAssetLoad(e) {
 
 // Helper function for queuing assets
 function load(url, maker) {
-  let cacheKey = url;
-  while (cacheKey.startsWith("../")) {
-    cacheKey = url.slice(3);
-  }
-  if (cache[cacheKey]) {
+  if (cache[url]) {
     console.log("cached", url);
-    return cache[cacheKey];
+    return cache[url];
   }
   console.log("load", url);
   const asset = maker(url, onAssetLoad);
   remaining++;
   total++;
 
-  cache[cacheKey] = asset;
+  cache[url] = asset;
   return asset;
 }
 
@@ -54,7 +50,6 @@ const Assets = {
     if (completed) {
       return cb();
     }
-
     readyListeners.push(cb);
     // No assets to load
     if (remaining === 0) {
@@ -85,33 +80,15 @@ const Assets = {
       };
       audio.addEventListener("canplay", onLoad, false);
       return audio;
-    }).cloneNode();
-  },
-
-  soundBuffer(url, ctx) {
-    return load(url, (url, onAssetLoad) =>
-      fetch(url)
-        .then(r => r.arrayBuffer())
-        .then(
-          ab =>
-            new Promise(success => {
-              ctx.decodeAudioData(ab, buffer => {
-                onAssetLoad(url);
-                success(buffer);
-              });
-            })
-        )
-    );
+    });
   },
 
   json(url) {
     return load(url, (url, onAssetLoad) =>
       fetch(url)
         .then(res => res.json())
-        .then(json => {
-          onAssetLoad(url);
-          return json;
-        })
+        .then(json => onAssetLoad(json))
+        .catch(e => console.error(e))
     );
   }
 };

@@ -1,22 +1,37 @@
 import math from "./math.js";
 import Rect from "../Rect.js";
 
-function addDebug(e) {
-  e.children = e.children || [];
-  const bb = new Rect(e.w, e.h, { fill: "rgba(255, 0, 0, 0.3)" });
-  e.children.push(bb);
-  if (e.hitBox) {
-    const { x, y, w, h } = e.hitBox;
+const scale_id = { x: 1, y: 1 };
+
+function addDebug(entity) {
+  entity.children = entity.children || [];
+  entity.children.push(
+    new Rect(entity.w, entity.h, { fill: "rgba(255, 0, 0, 0.3)" })
+  );
+  if (entity.hitBox) {
+    const { x, y, w, h } = entity.hitBox;
     const hb = new Rect(w, h, { fill: "rgba(255, 0, 0, 0.5)" });
     hb.pos.x = x;
     hb.pos.y = y;
-    e.children.push(hb);
+    entity.children.push(hb);
   }
-  return e;
+  return entity;
 }
 
 function angle(a, b) {
   return math.angle(center(a), center(b));
+}
+
+function bounds(entity) {
+  const { w, h, pos, hitBox, scale } = entity;
+  const sc = scale || scale_id;
+  const hit = hitBox || { x: 0, y: 0, w: w, h: h };
+  return {
+    x: pos.x + (sc.x > 0 ? hit.x : w - (hit.x + hit.w)),
+    y: pos.y + (sc.y > 0 ? hit.y : h - (hit.y + hit.h)),
+    w: hit.w - 1,
+    h: hit.h - 1
+  };
 }
 
 function center(entity) {
@@ -29,19 +44,6 @@ function center(entity) {
 
 function distance(a, b) {
   return math.distance(center(a), center(b));
-}
-
-function bounds(entity) {
-  const { w, h, pos, hitBox, scale } = entity;
-  const hit = hitBox || { x: 0, y: 0, w, h };
-  const sx = scale ? Math.abs(scale.x) : 1;
-  const sy = scale ? Math.abs(scale.y) : 1;
-  return {
-    x: hit.x * sx + pos.x,
-    y: hit.y * sy + pos.y,
-    w: hit.w * sx - 1,
-    h: hit.h * sy - 1
-  };
 }
 
 function hit(e1, e2) {

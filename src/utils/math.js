@@ -1,10 +1,3 @@
-function add(v1, v2) {
-  return {
-    x: v1.x + v2.x,
-    y: v1.y + v2.y
-  };
-}
-
 function angle(a, b) {
   const dx = a.x - b.x;
   const dy = a.y - b.y;
@@ -13,14 +6,7 @@ function angle(a, b) {
   return angle;
 }
 
-function center(w, h) {
-  return {
-    x: w / 2,
-    y: h / 2
-  };
-}
-
-function clamp(x, min = 0, max = 1) {
+function clamp(x, min, max) {
   return Math.max(min, Math.min(x, max));
 }
 
@@ -31,14 +17,6 @@ function distance(a, b) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-function dot(a, b) {
-  return a.x * b.x + a.y * b.y;
-}
-
-function lerp(x, inf, sup) {
-  return (x - inf) / (sup - inf);
-}
-
 function gauss(x) {
   return Math.exp(-x * x);
 }
@@ -47,18 +25,12 @@ function gaussDistance(x, center, dist) {
   return gauss((x - center) / dist);
 }
 
-function mix(a, b, p) {
-  return a * (1 - p) + b * p;
+function lerp(x, min, max) {
+  return (x - min) / (max - min);
 }
 
-function normalize({ x, y }) {
-  const length = Math.sqrt(x * x + y * y);
-  x /= length;
-  y /= length;
-  return {
-    x,
-    y
-  };
+function mix(a, b, p) {
+  return a * (1 - p) + b * p;
 }
 
 function rand(min, max) {
@@ -78,63 +50,25 @@ function randOneIn(max) {
 }
 
 function randOneFrom(items) {
-  return items[rand(items.length)];
+  return items[rand(0, items.length)];
 }
 
-const rnd = {
-  seed: 42,
-  rand: function(max, min) {
-    max = max || 1;
-    min = min || 0;
-    this.seed = (this.seed * 9301 + 49297) % 233280;
-    return (this.seed / 233280 * (max - min) + min) | 0;
-  }
-};
-
-function smoothstep(value, inf, sup) {
+function smoothstep(value, inf = 0, sup = 1) {
   var x = clamp(lerp(value, inf, sup), 0, 1);
   return x * x * (3 - 2 * x); // smooth formula
 }
 
-const ease = {
-  quadIn(x) {
-    return x * x;
-  },
-  quadOut(x) {
-    return 1 - this.quadIn(1 - x);
-  },
-  cubicIn(x) {
-    return x * x * x;
-  },
-  cubicInOut(p) {
-    if (p < 0.5) return this.cubicIn(p * 2) / 2;
-    return 1 - this.cubicIn((1 - p) * 2) / 2;
-  },
-  elasticOut(x) {
-    const p = 0.4;
-    return Math.pow(2, -10 * x) *
-      Math.sin((x - p / 4) *
-      (Math.PI * 2) / p) + 1;
-  }
-};
-
 export default {
-  add,
   angle,
-  center,
   clamp,
   distance,
-  dot,
-  ease,
+  lerp,
   gauss,
   gaussDistance,
-  lerp,
   mix,
-  normalize,
   rand,
   randf,
   randOneIn,
   randOneFrom,
-  rnd,
   smoothstep
 };

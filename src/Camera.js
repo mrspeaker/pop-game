@@ -7,10 +7,8 @@ class Camera extends Container {
   constructor(subject, viewport, worldSize = viewport) {
     super();
     this.pos = new Vec();
-    this.w = viewport.w;
-    this.h = viewport.h;
+    this.viewport = viewport;
     this.worldSize = worldSize;
-    this.easing = 0.03;
 
     // Debugging tracking rectangle
     // this.deb = this.add(
@@ -20,12 +18,9 @@ class Camera extends Container {
     // );
 
     this.shakePower = 0;
-    this.shakeDecay = 0;
-    this.shakeLast = new Vec();
-
+    this.lastShake = new Vec();
     this.flashTime = 0;
-    this.flashDuration = 0;
-    this.flashRect = null;
+    this.easing = 0.03;
 
     this.setTracking(64, 48);
     this.setSubject(subject);
@@ -49,82 +44,82 @@ class Camera extends Container {
       this.offset.x += e.w / 2;
       this.offset.y += e.h / 2;
     }
-    if (e && e.anchor) {
-      this.offset.x -= e.anchor.x;
-      this.offset.y -= e.anchor.y;
+    if (e && e.pivot) {
+      this.offset.x -= e.pivot.x;
+      this.offset.y -= e.pivot.y;
     }
     this.focus(1);
   }
 
-  shake(power = 8, duration = 0.5) {
-    this.shakePower = power;
-    this.shakeDecay = power / duration;
+  flash(length = 0.2, color = "#fff") {
+    const { viewport } = this;
+    this.remove(this.flashRect);
+    this.flashRect = this.add(
+      new Rect(viewport.w, viewport.h, { fill: color })
+    );
+    this.flashRect.pos = Vec.from(this.pos).multiply(-1);
+    this.flashLength = length;
+    this.flashTime = this.flashLength;
   }
 
-  _shake(dt) {
-    const { pos, shakePower, shakeLast } = this;
-    if (shakePower <= 0) {
-      shakeLast.set(0, 0);
+  shake(power = 5) {
+    this.shakePower = power;
+  }
+
+  _shake() {
+    const { pos, shakePower, lastShake } = this;
+    if (shakePower < 0) {
+      lastShake.set(0, 0);
       return;
     }
-    shakeLast.set(
+    lastShake.set(
       math.randf(-shakePower, shakePower),
       math.randf(-shakePower, shakePower)
     );
 
-    pos.add(shakeLast);
-    this.shakePower -= this.shakeDecay * dt;
+    pos.add(lastShake);
+    this.shakePower -= 0.2;
   }
 
   _unShake() {
-    const { pos, shakeLast } = this;
-    pos.subtract(shakeLast);
-  }
-
-  flash(duration = 0.3, color = "#fff") {
-    if (!this.flashRect) {
-      const { w, h } = this;
-      this.flashRect = this.add(new Rect(w, h, { fill: color }));
-    }
-    this.flashRect.style.fill = color;
-    this.flashDuration = duration;
-    this.flashTime = duration;
+    const { pos, lastShake } = this;
+    pos.subtract(lastShake);
   }
 
   _flash(dt) {
-    const { flashRect, flashDuration, pos } = this;
-    if (!flashRect) {
+    const { flashTime, flashRect } = this;
+    if (flashTime < 0) {
       return;
     }
 
-    const time = (this.flashTime -= dt);
-    if (time <= 0) {
+    if ((this.flashTime -= dt) <= 0) {
       this.remove(flashRect);
-      this.flashRect = null;
     } else {
-      flashRect.alpha = time / flashDuration;
-      flashRect.pos = Vec.from(pos).multiply(-1);
+      flashRect.alpha = this.flashTime / this.flashLength;
     }
   }
 
-  focus(ease = 1, track = true) {
-    const { pos, w, h, worldSize, subject, offset, tracking, deb } = this;
+  focus(ease = 1) {
+    const { pos, worldSize, viewport, subject, offset, tracking, deb } = this;
 
     const target = subject || pos;
 
-    const centeredX = target.x + offset.x - w / 2;
-    const maxX = worldSize.w - w;
+    const centeredX = target.x + offset.x - viewport.w / 2;
+    const maxX = worldSize.w - viewport.w;
     let x = -math.clamp(centeredX, 0, maxX);
 
-    const centeredY = target.y + offset.y - h / 2;
-    const maxY = worldSize.h - h;
+    const centeredY = target.y + offset.y - viewport.h / 2;
+    const maxY = worldSize.h - viewport.h;
     let y = -math.clamp(centeredY, 0, maxY);
 
     if (deb) {
-      deb.pos.set(-pos.x + w / 2 - tracking.x, -pos.y + h / 2 - tracking.y);
+      deb.pos.set(
+        -pos.x + viewport.w / 2 - tracking.x,
+        -pos.y + viewport.h / 2 - tracking.y
+      );
     }
 
-    if (track) {
+    if (tracking) {
       // Tracking box
       if (Math.abs(centeredX + pos.x) < tracking.x) {
         x = pos.x;
@@ -144,7 +139,7 @@ class Camera extends Container {
     if (this.subject) {
       this.focus(this.easing);
     }
-    this._shake(dt);
+    this._shake();
     this._flash(dt);
   }
 }

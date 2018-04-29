@@ -7,7 +7,7 @@ import screenCapture from "./utils/screenCapture.js";
 const STEP = 1 / 60;
 let MULTIPLIER = 1;
 let SPEED = STEP * MULTIPLIER;
-const MAX_FRAME = SPEED * 5;
+const MAX_FRAME = SPEED * 5 * 1000;
 
 class Game {
   constructor(w, h, parent = "#board", useWebGL) {
@@ -18,50 +18,52 @@ class Game {
       : new CanvasRenderer(w, h);
     document.querySelector(parent).appendChild(this.renderer.view);
     screenCapture(this.renderer.view);
-
     this.scene = new Container();
     this.destination = null;
 
-    this.fadeTime = 0;
-    this.fadeDuration = 0;
+    this.wipeTime = 0;
+    this.wipeDuration = 0;
   }
 
-  setScene(scene, duration = 0.5) {
-    if (!duration) {
+  setScene(scene, doWipe, duration = 0.5) {
+    scene.startTime = this.t;
+    if (!doWipe) {
       this.scene = scene;
       return;
     }
     this.destination = scene;
-    this.fadeTime = duration;
-    this.fadeDuration = duration;
+    this.wipeTime = duration;
+    this.wipeDuration = duration;
   }
 
   run(gameUpdate = () => {}) {
     Assets.onReady(() => {
       let dt = 0;
       let last = 0;
-      const loopy = ms => {
-        const { scene, renderer, fadeTime } = this;
 
-        const t = ms / 1000; // Let's work in seconds
+      // loopy is now an arrow function to scope `this`.
+      const loopy = ms => {
+        const { scene, renderer, wipeTime } = this;
+
+        const t = ms / 1000;
         dt += Math.min(t - last, MAX_FRAME);
         last = t;
 
         while (dt >= SPEED) {
-          this.scene.update(STEP, t / MULTIPLIER);
-          gameUpdate(STEP, t / MULTIPLIER);
+          scene.update(STEP, t);
+          gameUpdate(STEP, t);
           dt -= SPEED;
         }
-        this.renderer.render(this.scene, dt / SPEED);
+        renderer.render(scene, dt / SPEED, false);
 
         // Screen transition
-        if (fadeTime > 0) {
-          const { fadeDuration, destination } = this;
-          const ratio = fadeTime / fadeDuration;
+        if (wipeTime > 0) {
+          const { wipeDuration, destination } = this;
+          const ratio = wipeTime / wipeDuration;
           scene.alpha = ratio;
           destination.alpha = 1 - ratio;
-          renderer.render(destination, false);
-          if ((this.fadeTime -= STEP) <= 0) {
+          renderer.render(destination, dt / SPEED, true);
+          if ((this.wipeTime -= STEP) <= 0) {
             this.scene = destination;
             this.destination = null;
           }

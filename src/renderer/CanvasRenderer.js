@@ -19,15 +19,20 @@ class CanvasRenderer {
       if (container.visible === false || container.alpha === 0) {
         return;
       }
-      
+      if (container.alpha) {
+        ctx.save();
+        ctx.globalAlpha = container.alpha;
+      }
+
       // Render the container children
       container.children.forEach(child => {
-        // Don't render self (or children) if not visible
         if (child.visible == false || child.alpha === 0) {
           return;
         }
         ctx.save();
-        if (child.alpha) ctx.globalAlpha = child.alpha;
+        if (child.alpha) {
+          ctx.globalAlpha = child.alpha;
+        }
 
         // Handle transforms
         if (child.pos) {
@@ -45,31 +50,11 @@ class CanvasRenderer {
 
         // Draw the leaf nodes
         if (child.text) {
-          const { align, fill, font, stroke, lineWidth } = child.style;
+          const { font, fill, align } = child.style;
           if (font) ctx.font = font;
+          if (fill) ctx.fillStyle = fill;
           if (align) ctx.textAlign = align;
-          if (fill) {
-            ctx.fillStyle = fill;
-            ctx.fillText(child.text, 0, 0);
-          }
-          if (stroke) {
-            ctx.strokeStyle = stroke;
-            ctx.lineWidth = lineWidth || 1;
-            ctx.strokeText(child.text, 0, 0);
-          }
-        } else if (child.style && child.w && child.h) {
-          ctx.fillStyle = child.style.fill;
-          ctx.fillRect(0, 0, child.w, child.h);
-        } else if (child.path) {
-          const [head, ...tail] = child.path;
-          if (tail.length > 0) {
-            ctx.fillStyle = child.style.fill || "#fff";
-            ctx.beginPath();
-            ctx.moveTo(head.x, head.y);
-            tail.forEach(({ x, y }) => ctx.lineTo(x, y));
-            ctx.closePath();
-            ctx.fill();
-          }
+          ctx.fillText(child.text, 0, 0);
         } else if (child.texture) {
           const img = child.texture.img;
           if (child.tileW) {
@@ -87,15 +72,31 @@ class CanvasRenderer {
           } else {
             ctx.drawImage(img, 0, 0);
           }
+        } else if (child.style && child.w && child.h) {
+          ctx.fillStyle = child.style.fill;
+          ctx.fillRect(0, 0, child.w, child.h);
+        } else if (child.path) {
+          const [head, ...tail] = child.path;
+          if (child.path.length > 1) {
+            ctx.fillStyle = child.style.fill || "#fff";
+            ctx.beginPath();
+            ctx.moveTo(head.x, head.y);
+            tail.forEach(({ x, y }) => ctx.lineTo(x, y));
+            ctx.closePath();
+            ctx.fill();
+          }
         }
 
         // Render any child sub-nodes
         if (child.children) {
           renderRec(child);
         }
-
         ctx.restore();
       });
+
+      if (container.alpha) {
+        ctx.restore();
+      }
     }
 
     if (clear) {

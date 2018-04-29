@@ -5,7 +5,11 @@ function applyForce(e, force) {
 }
 
 function applyFriction(e, amount) {
-  const friction = e.vel.clone().multiply(-1).normalize().multiply(amount);
+  const friction = e.vel
+    .clone()
+    .multiply(-1)
+    .normalize()
+    .multiply(amount);
   applyForce(e, friction);
 }
 
@@ -38,7 +42,6 @@ function integratePos(e, dt) {
   e.pos.add(dis);
   return dis;
 }
-
 function speed({ vel }) {
   return Math.sqrt(vel.x * vel.x + vel.y * vel.y);
 }

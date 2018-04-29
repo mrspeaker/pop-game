@@ -10,7 +10,6 @@ class Container {
   }
 
   remove(child) {
-    // TODO: replace with `for` loop too.
     this.children = this.children.filter(c => c !== child);
     return child;
   }

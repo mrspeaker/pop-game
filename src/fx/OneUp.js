@@ -1,24 +1,25 @@
-import Container from "../Container.js";
 import Rect from "../Rect.js";
+import Container from "../Container.js";
 import Vec from "../utils/Vec.js";
 
 class OneUp extends Container {
-  constructor(display, speed = 2, duration = 1) {
+  constructor(display, speed = 2, life = 0.6) {
     super();
+    //40, 30, { fill: "#ff0" });
+    this.children = [display || new Rect(40, 30, {fill: "#ff0"})];
+    this.life = life;
+    this.lifeCount = 0;
     this.pos = new Vec();
     this.vel = new Vec(0, -speed);
-    this.duration = duration;
-    this.life = duration;
-    this.add(display || new Rect(40, 30, { fill: "#ff0" }));
   }
   update(dt) {
     super.update(dt);
-    const { life, duration, pos, vel } = this;
-    this.alpha = life / duration;
-
+    const { life, lifeCount, pos, vel } = this;
+    const ratio = lifeCount / life;
+    this.alpha = 1 - (ratio * ratio);
     pos.add(vel);
 
-    if ((this.life -= dt) <= 0) {
+    if ((this.lifeCount += dt) >= life) {
       this.dead = true;
     }
   }

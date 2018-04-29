@@ -17,6 +17,7 @@ class TileMap extends Container {
       s.frame = frame;
       s.pos.x = i % mapW * tileW;
       s.pos.y = Math.floor(i / mapW) * tileH;
+      s.isTileSprite = true;
       return s;
     });
   }
