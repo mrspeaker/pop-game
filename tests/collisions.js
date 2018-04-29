@@ -32,12 +32,11 @@ const e4 = makeEnt(2, 2);
 
 ///// Pre-bounds test
 
-const boundslessHit = (a, b) => (
+const boundslessHit = (a, b) =>
   a.pos.x + a.w - 1 >= b.pos.x &&
   a.pos.x <= b.pos.x + b.w - 1 &&
   a.pos.y + a.h - 1 >= b.pos.y &&
-  a.pos.y <= b.pos.y + b.h - 1
-);
+  a.pos.y <= b.pos.y + b.h - 1;
 
 assert(boundslessHit(e1, e2), "hit simple (1x1)", e1.pos, e2.pos);
 e2.pos.set(1, 0);
@@ -176,7 +175,7 @@ map = new TileMap(
   [
     { i: 0, walkable: true },
     { i: 1, walkable: false },
-    { i: 1, walkable: true },
+    { i: 1, walkable: true }
   ],
   mapW,
   mapH,
@@ -186,16 +185,24 @@ map = new TileMap(
 
 const someHits = hits => hits.up || hits.down || hits.left || hits.right;
 const noHits = hits => !someHits(hits);
+const only = (hits, dir) =>
+  hits[dir] &&
+  (hits.up ? 1 : 0) +
+    (hits.down ? 1 : 0) +
+    (hits.left ? 1 : 0) +
+    (hits.right ? 1 : 0) ===
+    1;
+
 e1.pos.set(0, 0);
 let r = wallslide(e1, map, 0, 0);
 assert(noHits(r.hits), "no move, no hits");
 
 r = wallslide(e1, map, 1, 0);
-assert(r.hits.right && r.x === 0, "blocked by tile, right", r);
+assert(only(r.hits, "right") && r.x === 0, "blocked by tile, right", r);
 
 e1.pos.set(2, 0);
 r = wallslide(e1, map, -1, 0);
-assert(r.hits.left && r.x === 0, "blocked by tile, left", r);
+assert(only(r.hits, "left") && r.x === 0, "blocked by tile, left", r);
 
 mapW = 3;
 mapH = 1;
@@ -205,7 +212,7 @@ map = new TileMap(
   [
     { i: 0, walkable: true },
     { i: 1, walkable: false },
-    { i: 1, walkable: true },
+    { i: 1, walkable: true }
   ],
   mapW,
   mapH,
@@ -218,7 +225,7 @@ r = wallslide(e3, map, 0, 0);
 assert(noHits(r.hits), "no move, no hits (2x2)");
 
 r = wallslide(e3, map, 2, 0);
-assert(r.hits.right && r.x === 0, "blocked by tile, right (2x2)", r);
+assert(only(r.hits, "right") && r.x === 0, "blocked by tile, right (2x2)", r);
 
 /// UP & DOWN
 
@@ -230,7 +237,7 @@ map = new TileMap(
   [
     { i: 0, walkable: true },
     { i: 1, walkable: false },
-    { i: 1, walkable: true },
+    { i: 1, walkable: true }
   ],
   mapW,
   mapH,
@@ -243,11 +250,11 @@ r = wallslide(e1, map, 0, 0);
 assert(noHits(r.hits), "no move, no hits");
 
 r = wallslide(e1, map, 0, 1);
-assert(r.hits.down && r.y === 0, "blocked by tile, below", r);
+assert(only(r.hits, "down") && r.y === 0, "blocked by tile, below", r);
 
 e1.pos.set(0, 2);
 r = wallslide(e1, map, 0, -1);
-assert(r.hits.up && r.y === 0, "blocked by tile, above", r);
+assert(only(r.hits, "up") && r.y === 0, "blocked by tile, above", r);
 
 mapW = 1;
 mapH = 3;
@@ -257,7 +264,7 @@ map = new TileMap(
   [
     { i: 0, walkable: true },
     { i: 1, walkable: false },
-    { i: 1, walkable: true },
+    { i: 1, walkable: true }
   ],
   mapW,
   mapH,
@@ -267,11 +274,10 @@ map = new TileMap(
 
 e3.pos.set(0, 0);
 r = wallslide(e3, map, 0, 2);
-assert(r.hits.down && r.y === 0, "blocked by tile, below (2x2)", r);
+assert(only(r.hits, "down") && r.y === 0, "blocked by tile, below (2x2)", r);
 e3.pos.set(0, 5);
 r = wallslide(e3, map, 0, -2);
-assert(r.hits.up && r.y === -1, "blocked by tile, above (2x2)", r);
-
+assert(only(r.hits, "up") && r.y === -1, "blocked by tile, above (2x2)", r);
 
 mapW = 2;
 mapH = 2;
@@ -282,7 +288,7 @@ map = new TileMap(
     { i: 0, walkable: true },
     { i: 1, walkable: false },
     { i: 2, walkable: false },
-    { i: 3, walkable: true },
+    { i: 3, walkable: true }
   ],
   mapW,
   mapH,
@@ -292,7 +298,11 @@ map = new TileMap(
 
 e3.pos.set(0, 0);
 r = wallslide(e3, map, 2, 2);
-assert(r.hits.down && r.hits.right && r.x === 1 && r.y == 1, "blocked moving diag (2x2)", r);
+assert(
+  r.hits.down && r.hits.right && r.x === 1 && r.y == 1,
+  "blocked moving diag (2x2)",
+  r
+);
 
 // Can "jump" tiles :( ... (using 1x1 sprite to demonstrate)
 e1.pos.set(2, 2);
@@ -308,7 +318,7 @@ map = new TileMap(
     { i: 0, walkable: true },
     { i: 1, walkable: false },
     { i: 2, walkable: false },
-    { i: 3, walkable: true },
+    { i: 3, walkable: true }
   ],
   mapW,
   mapH,
@@ -318,7 +328,11 @@ map = new TileMap(
 
 e3.pos.set(4, 4);
 r = wallslide(e3, map, -2, -2);
-assert(r.hits.up && r.hits.left && r.x === -1 && r.y === -1, "blocked moving diag up/left (2x2)", r);
+assert(
+  r.hits.up && r.hits.left && r.x === -1 && r.y === -1,
+  "blocked moving diag up/left (2x2)",
+  r
+);
 
 log("------");
 log("- TESTS DONE");
