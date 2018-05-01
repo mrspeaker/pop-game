@@ -21,6 +21,7 @@ import Sprite from "./Sprite.js";
 import State from "./State.js";
 import Text from "./Text.js";
 import Texture from "./Texture.js";
+import textureMaker from "./utils/textureMaker.js";
 import tiledParser from "./utils/tiledParser.js";
 import TileMap from "./TileMap.js";
 import TileSprite from "./TileSprite.js";
@@ -54,6 +55,7 @@ export default {
   State,
   Text,
   Texture,
+  textureMaker,
   tiledParser,
   TileMap,
   TileSprite,
