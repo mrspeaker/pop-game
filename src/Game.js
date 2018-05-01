@@ -10,7 +10,7 @@ let SPEED = STEP * MULTIPLIER;
 const MAX_FRAME = SPEED * 5 * 1000;
 
 class Game {
-  constructor(w, h, parent = "#board", useWebGL) {
+  constructor(w, h, parent = "body", useWebGL) {
     this.w = w;
     this.h = h;
     this.renderer = useWebGL
