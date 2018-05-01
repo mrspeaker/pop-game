@@ -1,7 +1,7 @@
 import pop from "../src/index.js";
 const { Game, KeyControls, math, Sprite, TileSprite, Texture } = pop;
 
-const useWebGl2 = true;
+const useWebGl2 = false;
 const game = new Game(800, 600, "#board", useWebGl2);
 const { scene, w, h } = game;
 const controls = new KeyControls();
