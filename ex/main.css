@@ -1,0 +1,10 @@
+body {
+  background-color: #ddd;
+  text-align: center;
+  margin: 50px auto;
+  font-size: 9pt;
+}
+canvas {
+  box-shadow: 0 0 10px #999;
+  border-radius: 3px;
+}
