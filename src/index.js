@@ -9,6 +9,7 @@ import GamepadControls from "./controls/GamepadControls.js";
 import KeyControls from "./controls/KeyControls.js";
 import math from "./utils/math.js";
 import Matrix from "./utils/Matrix.js";
+import MouseControls from "./controls/MouseControls.js";
 import OneUp from "./fx/OneUp.js";
 import ParticleEmitter from "./fx/ParticleEmitter.js";
 import physics from "./utils/physics.js";
@@ -43,6 +44,7 @@ export default {
   KeyControls,
   math,
   Matrix,
+  MouseControls,
   OneUp,
   ParticleEmitter,
   physics,
