@@ -13,6 +13,6 @@ npm start
 
 This downloads the internet then runs a web server and serves the example in `test.js`. Browse on http://localhost:9966.
 
-## The library
+## Notes
 
-Docs to come.
+If you're looking for it, the [Web Renderer](https://github.com/mrspeaker/pop-game/tree/master/src/renderer/WebGL2Renderer) is over here.
